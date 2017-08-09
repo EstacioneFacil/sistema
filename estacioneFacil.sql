@@ -1,5 +1,5 @@
 CREATE TABLE areas (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  descricao VARCHAR(255)
 );
 
@@ -35,7 +35,7 @@ ALTER TABLE usuarios ADD CONSTRAINT PK_usuarios PRIMARY KEY (id);
 CREATE TABLE vagas (
  id SERIAL NOT NULL,
  codigo VARCHAR(10),
- area_id INT NOT NULL,
+ area_id SERIAL NOT NULL,
  tipodeveiculo_id SERIAL
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE precos (
  datainicio DATE NOT NULL,
  datafim DATE,
  valor REAL NOT NULL,
- area_id INT NOT NULL,
+ area_id SERIAL NOT NULL,
  tipo CHAR(10) NOT NULL,
  tipodeveiculo_id SERIAL,
  vaga_id SERIAL
