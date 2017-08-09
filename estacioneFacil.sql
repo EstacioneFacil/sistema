@@ -7,7 +7,7 @@ ALTER TABLE areas ADD CONSTRAINT PK_areas PRIMARY KEY (id);
 
 
 CREATE TABLE telas (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  descricao VARCHAR(255) NOT NULL
 );
 
@@ -15,7 +15,7 @@ ALTER TABLE telas ADD CONSTRAINT PK_telas PRIMARY KEY (id);
 
 
 CREATE TABLE tipodeveiculos (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  descricao VARCHAR(255)
 );
 
@@ -23,7 +23,7 @@ ALTER TABLE tipodeveiculos ADD CONSTRAINT PK_tipodeveiculos PRIMARY KEY (id);
 
 
 CREATE TABLE usuarios (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  nome VARCHAR(255) NOT NULL,
  senha VARCHAR(255) NOT NULL,
  login VARCHAR(10) NOT NULL
@@ -33,19 +33,19 @@ ALTER TABLE usuarios ADD CONSTRAINT PK_usuarios PRIMARY KEY (id);
 
 
 CREATE TABLE vagas (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  codigo VARCHAR(10),
  area_id INT NOT NULL,
- tipodeveiculo_id INT
+ tipodeveiculo_id SERIAL
 );
 
 ALTER TABLE vagas ADD CONSTRAINT PK_vagas PRIMARY KEY (id);
 
 
 CREATE TABLE auditorias (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  tabela VARCHAR(255) NOT NULL,
- usuario_id INT NOT NULL,
+ usuario_id SERIAL NOT NULL,
  datahora TIMESTAMP NOT NULL,
  acao VARCHAR(255) NOT NULL,
  query TEXT NOT NULL
@@ -55,9 +55,9 @@ ALTER TABLE auditorias ADD CONSTRAINT PK_auditorias PRIMARY KEY (id);
 
 
 CREATE TABLE permissoes (
- id INT NOT NULL,
- usuario_id INT NOT NULL,
- tela_id INT NOT NULL,
+ id SERIAL NOT NULL,
+ usuario_id SERIAL NOT NULL,
+ tela_id SERIAL NOT NULL,
  visualizar BOOLEAN DEFAULT true NOT NULL,
  inserir BOOLEAN DEFAULT true NOT NULL,
  editar BOOLEAN DEFAULT true NOT NULL,
@@ -68,22 +68,22 @@ ALTER TABLE permissoes ADD CONSTRAINT PK_permissoes PRIMARY KEY (id);
 
 
 CREATE TABLE precos (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  datainicio DATE NOT NULL,
  datafim DATE,
  valor REAL NOT NULL,
  area_id INT NOT NULL,
  tipo CHAR(10) NOT NULL,
- tipodeveiculo_id INT,
- vaga_id INT
+ tipodeveiculo_id SERIAL,
+ vaga_id SERIAL
 );
 
 ALTER TABLE precos ADD CONSTRAINT PK_precos PRIMARY KEY (id);
 
 
 CREATE TABLE auditoria_detalhes (
- id INT NOT NULL,
- auditoria_id INT NOT NULL,
+ id SERIAL NOT NULL,
+ auditoria_id SERIAL NOT NULL,
  coluna VARCHAR(255) NOT NULL,
  valor_antigo TEXT,
  valor_novo TEXT,
@@ -94,14 +94,14 @@ ALTER TABLE auditoria_detalhes ADD CONSTRAINT PK_auditoria_detalhes PRIMARY KEY 
 
 
 CREATE TABLE movimentacoes (
- id INT NOT NULL,
+ id SERIAL NOT NULL,
  datahoraentrada TIMESTAMP NOT NULL,
  datahorasaida TIMESTAMP,
- usuario_id INT NOT NULL,
+ usuario_id SERIAL NOT NULL,
  placa VARCHAR(10) NOT NULL,
  valor REAL,
- preco_id INT,
- vaga_id INT NOT NULL
+ preco_id SERIAL,
+ vaga_id SERIAL NOT NULL
 );
 
 ALTER TABLE movimentacoes ADD CONSTRAINT PK_movimentacoes PRIMARY KEY (id);
