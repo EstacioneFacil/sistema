@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/estacioneFacil</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">senha</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
+    <property name="connection.pool_size">1</property>
+
+    <mapping class="model.Anexo"/>
+    <mapping class="model.Area"/>
+    <mapping class="model.Auditoria"/>
+    <mapping class="model.AuditoriaDetalhe"/>
+    <mapping class="model.GrupoPermissao"/>
+    <mapping class="model.Menu"/>
+    <mapping class="model.Movimentacao"/>
+    <mapping class="model.Permissao"/>
+    <mapping class="model.TabelaPreco"/>
+    <mapping class="model.TipoVeiculo"/>
+    <mapping class="model.Usuario"/>
+    <mapping class="model.Vaga"/>
+  </session-factory>
+</hibernate-configuration>
