@@ -1,0 +1,24 @@
+netbeans:
+    stdin_open: true
+    tty: true
+    image: fgrehm/netbeans:v8.0.1
+    volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+        - ./.netbeans-docker:/home/developer/.netbeans
+        - .:/workspace
+        - ./EstacioneFacil:/home/developer/NetBeansProjects/EstacioneFacil
+    environment:
+        DISPLAY: :0
+
+db:
+    image: postgres
+    volumes:
+        - ./sql:/docker-entrypoint-initdb.d
+    ports:
+        - "5432:5432"
+    environment:
+
+        # Postgres
+        POSTGRES_DB: estacioneFacil
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: senha
