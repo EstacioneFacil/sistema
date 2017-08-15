@@ -7,7 +7,6 @@
     <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/estacioneFacil</property>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">senha</property>
-    <property name="hibernate.show_sql">true</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="connection.pool_size">1</property>
 

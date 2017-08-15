@@ -4,10 +4,12 @@ import dao.TipoVeiculoDao;
 import java.util.List;
 import model.Area;
 import model.TipoVeiculo;
+import org.apache.log4j.Logger;
 
 
 public class Main {
     public static void main(String[] args) {
+        
         
         AreaDao areaDao = new AreaDao();
         TipoVeiculoDao tipoVeiculoDao = new TipoVeiculoDao();
