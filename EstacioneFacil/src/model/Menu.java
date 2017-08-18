@@ -1,12 +1,14 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "menu")
@@ -30,6 +32,8 @@ public class Menu implements Serializable {
     @Column(name = "menu_id")
     private Long idMenu;
 
+    @Transient
+    private List<Menu> subMenus;
     
     
     public Long getId() {
@@ -70,5 +74,13 @@ public class Menu implements Serializable {
 
     public void setIdMenu(Long idMenu) {
         this.idMenu = idMenu;
+    }
+
+    public List<Menu> getSubMenus() {
+        return subMenus;
+    }
+
+    public void setSubMenus(List<Menu> subMenus) {
+        this.subMenus = subMenus;
     }
 }

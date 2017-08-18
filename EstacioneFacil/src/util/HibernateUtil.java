@@ -1,9 +1,26 @@
 package util;
 
+import config.ConfiguracaoSistema;
+import java.util.Properties;
+import model.Anexo;
+import model.Area;
+import model.Auditoria;
+import model.AuditoriaDetalhe;
+import model.GrupoPermissao;
+import model.Menu;
+import model.Movimentacao;
+import model.Permissao;
+import model.TabelaPreco;
+import model.TipoVeiculo;
+import model.Usuario;
+import model.Vaga;
 import org.hibernate.HibernateException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 
 public class HibernateUtil {
@@ -12,9 +29,30 @@ public class HibernateUtil {
     
     static {
         try {
-            sessionFactory = new Configuration().configure("/config/hibernate.cfg.xml").buildSessionFactory();
+            Configuration configuration = new Configuration();
+            Properties properties = new Properties();
+            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
+            properties.setProperty("hibernate.connection.username", ConfiguracaoSistema.getLogin());
+            configuration.setProperties(properties);
+            
+            //mapeando classes
+            configuration.addAnnotatedClass(Anexo.class);
+            configuration.addAnnotatedClass(Area.class);
+            configuration.addAnnotatedClass(Auditoria.class);
+            configuration.addAnnotatedClass(AuditoriaDetalhe.class);
+            configuration.addAnnotatedClass(GrupoPermissao.class);
+            configuration.addAnnotatedClass(Menu.class);
+            configuration.addAnnotatedClass(Movimentacao.class);
+            configuration.addAnnotatedClass(Permissao.class);
+            configuration.addAnnotatedClass(TabelaPreco.class);
+            configuration.addAnnotatedClass(TipoVeiculo.class);
+            configuration.addAnnotatedClass(Usuario.class);
+            configuration.addAnnotatedClass(Vaga.class);
+            
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build(); 
+            
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         } catch (Throwable ex) {
-            // Log the exception. 
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
