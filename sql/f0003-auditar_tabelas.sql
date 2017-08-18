@@ -16,6 +16,10 @@ DECLARE
 
     --Recebe o nome da tabela concatenada com o esquema
     v_trigger_on TEXT;
+
+    v_trigger_insert TEXT;
+
+    v_trigger_insert_on TEXT;
     
 BEGIN
     --Obtém todas as tabelas possíveis de auditorias que não estão sendo auditadas
