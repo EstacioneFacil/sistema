@@ -1,6 +1,6 @@
 CREATE TABLE anexo (
  id SERIAL NOT NULL,
- data VARCHAR(255) NOT NULL,
+ data TIMESTAMP NOT NULL,
  nome VARCHAR(255) NOT NULL,
  observacao VARCHAR(255)
 );
@@ -29,7 +29,7 @@ CREATE TABLE menu (
  descricao VARCHAR(255) NOT NULL,
  ordem INT,
  grupo INT,
- menu_id SERIAL
+ menu_id INT
 );
 
 ALTER TABLE menu ADD CONSTRAINT PK_menu PRIMARY KEY (id);
