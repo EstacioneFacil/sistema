@@ -29,7 +29,8 @@ CREATE TABLE menu (
  descricao VARCHAR(255) NOT NULL,
  ordem INT,
  grupo INT,
- menu_id INT
+ menu_id INT,
+ acao INT
 );
 
 ALTER TABLE menu ADD CONSTRAINT PK_menu PRIMARY KEY (id);
