@@ -20,6 +20,10 @@ public class PermissaoDao extends GenericDao<Permissao> {
         }
     }
     
+    public void excluir(Permissao permissao) {
+        delete(permissao);
+    }
+        
     public List<Permissao> buscarPermissoes(Long idGrupoPermissao) {
         Criteria crit = getSession().createCriteria(Permissao.class);
         crit.add(Restrictions.eq("idGrupoPermissao", idGrupoPermissao));

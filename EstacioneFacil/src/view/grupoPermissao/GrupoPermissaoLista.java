@@ -1,12 +1,14 @@
 package view.grupoPermissao;
 
 import dao.GrupoPermissaoDao;
+import dao.PermissaoDao;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.GrupoPermissao;
+import model.Permissao;
 import model.vo.GrupoPermissaoFiltroVO;
 import org.apache.log4j.Logger;
 import util.ExceptionUtils;
@@ -221,6 +223,7 @@ public class GrupoPermissaoLista extends JDialogLista {
         try {
             GrupoPermissao grupoPermissao = getLinhaSelecionada();
             if (excluir(grupoPermissao)) {
+                excluirPermissoes(grupoPermissao);
                 grupoPermissaoDao.excluir(grupoPermissao);
                 mostrarMensagemExcluido();
                 pesquisar();
@@ -231,6 +234,16 @@ public class GrupoPermissaoLista extends JDialogLista {
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void excluirPermissoes(GrupoPermissao grupoPermissao) {
+        PermissaoDao permissaoDao = new PermissaoDao();
+        List<Permissao> permissoes = permissaoDao.buscarPermissoes(grupoPermissao.getId());
+        if (permissoes != null) {
+            for (Permissao permissao : permissoes) {
+                permissaoDao.excluir(permissao);
+            }
+        }
+    }
+    
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         GrupoPermissao grupoPermissao = getLinhaSelecionada();
         if (grupoPermissao != null) {
