@@ -171,7 +171,7 @@ public class UsuarioCadastro extends JDialogCadastro {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     public void carregarCadastro() {   
-        comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(false)));
+        comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(true)));
         ((ComboModel) comboGrupoPermissao.getModel()).setSelectedIndex(0);
         
         if (usuario.getId() != null) {
