@@ -25,14 +25,16 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
-    private static final SessionFactory sessionFactory;
+    public static final SessionFactory sessionFactory;
     
     static {
         try {
             Configuration configuration = new Configuration();
             Properties properties = new Properties();
             properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
-            properties.setProperty("hibernate.connection.username", ConfiguracaoSistema.getLogin());
+            if (ConfiguracaoSistema.getLogin() != null) {
+                properties.setProperty("hibernate.connection.username", ConfiguracaoSistema.getLogin());
+            }
             configuration.setProperties(properties);
             
             //mapeando classes

@@ -5,6 +5,7 @@ import controller.LoginController;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import model.util.MD5Encryption;
 import model.vo.CredencialVO;
 
 /**
@@ -175,7 +176,7 @@ public class Login extends javax.swing.JDialog {
         } else {
             ConfiguracaoSistema.setLogin(login);
             credencialVO.setLogin(login);
-            credencialVO.setSenha(senha);//new MD5Encryption().encrypt(senha));
+            credencialVO.setSenha(new MD5Encryption().encrypt(senha));
             credencialVO.setSenhaCorreta(false);
 
             credencialVO = new LoginController().logar(credencialVO);

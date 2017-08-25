@@ -7,6 +7,7 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.GrupoPermissao;
+import model.vo.GrupoPermissaoFiltroVO;
 import org.apache.log4j.Logger;
 import util.ExceptionUtils;
 import view.classes.JDialogLista;
@@ -20,12 +21,14 @@ public class GrupoPermissaoLista extends JDialogLista {
     private final Logger logger = Logger.getLogger(getClass().getName());
     
     private GrupoPermissaoDao grupoPermissaoDao;
+    private GrupoPermissaoFiltroVO grupoPermissaoFiltroVO;
     
     public GrupoPermissaoLista() {
         super("Grupos de Permissão");
         initComponents();
         
         grupoPermissaoDao = new GrupoPermissaoDao();
+        grupoPermissaoFiltroVO = new GrupoPermissaoFiltroVO();
         
         carregarLista();
     }
@@ -34,9 +37,9 @@ public class GrupoPermissaoLista extends JDialogLista {
         List<GrupoPermissao> dados = new ArrayList<>();
         try {
             logger.debug("Buscando registros de grupos de permissao");
-            dados = grupoPermissaoDao.findAll();
+            dados = grupoPermissaoDao.consultar(grupoPermissaoFiltroVO);
         } catch(Exception e) {
-            logger.error("Não foi possível carregar a lista de grupos de permissão!", e);
+            logger.error("Não foi possível carregar a lista de grupos de permissao!", e);
             ExceptionUtils.mostrarErro(this, "Não foi possível carregar a lista de grupos de permissão!");
         }
         this.tblGruposPermissao.setModel(new GrupoPermissaoTableModel(dados));
@@ -46,9 +49,8 @@ public class GrupoPermissaoLista extends JDialogLista {
     }
     
     public void pesquisar() {
-//        usuarioFiltroVO.setSituacao(SituacaoEnum.getByLabel(comboSituacao.getSelectedItem().toString()).getKey());
-//        usuarioFiltroVO.setPesquisa(txtPesquisar.getText());
-//        
+        grupoPermissaoFiltroVO.setPesquisa(txtPesquisar.getText());
+        
         carregarLista();
     }
     
@@ -219,9 +221,9 @@ public class GrupoPermissaoLista extends JDialogLista {
         try {
             GrupoPermissao grupoPermissao = getLinhaSelecionada();
             if (excluir(grupoPermissao)) {
-//                usuarioDao.excluir(usuario);
-//                mostrarMensagemExcluido();
-//                pesquisar();
+                grupoPermissaoDao.excluir(grupoPermissao);
+                mostrarMensagemExcluido();
+                pesquisar();
             }
         } catch(Exception e) {
             logger.error("Não foi possível excluir o registro!", e);

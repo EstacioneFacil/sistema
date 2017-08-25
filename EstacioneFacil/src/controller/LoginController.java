@@ -15,7 +15,7 @@ public class LoginController {
 
     public CredencialVO logar(CredencialVO credencialVO) {
         UsuarioDao usuarioDao = new UsuarioDao();
-        Usuario usuario = usuarioDao.buscarPorLogin(credencialVO.getLogin(), credencialVO.getSenha());
+        Usuario usuario = usuarioDao.buscarPorLoginSenha(credencialVO.getLogin(), credencialVO.getSenha());
 
         if (usuario == null) {
             credencialVO.setSenhaCorreta(true);

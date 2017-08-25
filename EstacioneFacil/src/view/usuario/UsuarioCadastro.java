@@ -1,9 +1,14 @@
 package view.usuario;
 
 import dao.UsuarioDao;
+import javax.swing.DefaultComboBoxModel;
 import model.Usuario;
+import model.util.MD5Encryption;
+import model.vo.SelectItemVO;
 import util.ExceptionUtils;
 import util.MensageiroUtils;
+import view.classes.ComboModel;
+import view.classes.CombosDinamicos;
 import view.classes.JDialogCadastro;
 
 /**
@@ -14,7 +19,7 @@ public class UsuarioCadastro extends JDialogCadastro {
 
     private Usuario usuario;
     private UsuarioDao usuarioDao;
-//    private MD5Encryption md5Encryption;
+    private MD5Encryption md5Encryption;
 
     public UsuarioCadastro(Object cadastroAnterior, Usuario usuario) {
         super("Usuário");
@@ -22,7 +27,7 @@ public class UsuarioCadastro extends JDialogCadastro {
 
         this.usuario = usuario;
         this.usuarioDao = new UsuarioDao();
-//        this.md5Encryption = new MD5Encryption();
+        this.md5Encryption = new MD5Encryption();
         setCadastroAnterior(cadastroAnterior);
         
         carregarCadastro();
@@ -93,6 +98,7 @@ public class UsuarioCadastro extends JDialogCadastro {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Gp. Permissão:*");
+        jLabel5.setToolTipText("Grupo de Permissão");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,25 +170,21 @@ public class UsuarioCadastro extends JDialogCadastro {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    public void carregarCadastro() {        
+    public void carregarCadastro() {   
+        comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(false)));
+        ((ComboModel) comboGrupoPermissao.getModel()).setSelectedIndex(0);
+        
         if (usuario.getId() != null) {
             carregarParaEdicao();
         }
     }
     
     public void carregarParaEdicao() {
-        try {
-            txtNome.setText(usuario.getNome());
-            txtLogin.setText(usuario.getLogin());
-            txtSenha.setText(usuario.getSenha());
-            txtConfirmaSenha.setText(usuario.getSenha());
-//            txtSenha.setText(md5Encryption.decrypt(usuario.getSenha()));
-//            txtConfirmaSenha.setText(md5Encryption.decrypt(usuario.getSenha()));
-//            ((DefaultComboBoxModel) comboGrupoPermissao.getModel()).setSelectedItem(TipoUsuarioEnum.getByKey(usuario.getTipo()).getLabel());
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        txtNome.setText(usuario.getNome());
+        txtLogin.setText(usuario.getLogin());
+        txtSenha.setText(md5Encryption.decrypt(usuario.getSenha()));
+        txtConfirmaSenha.setText(md5Encryption.decrypt(usuario.getSenha()));        
+        ((ComboModel) comboGrupoPermissao.getModel()).setSelectedItem(new SelectItemVO(usuario.getGrupoPermissao().getId(), usuario.getGrupoPermissao().getDescricao()));
     }
 
     public boolean verificaCamposObrigatorios() {
@@ -209,9 +211,8 @@ public class UsuarioCadastro extends JDialogCadastro {
             return false;
         } else if (isSenhasIguais(senha, confirmaSenha)) {
             try {
-//                String senhaEncrypt = md5Encryption.encrypt(senha);
-//                usuario.setSenha(senhaEncrypt);
-                usuario.setSenha(senha);
+                String senhaEncrypt = md5Encryption.encrypt(senha);
+                usuario.setSenha(senhaEncrypt);
             } catch(Exception e) {
                 MensageiroUtils.mensagemErro(this, "Ocorreu algum erro ao criar encriptação da senha!");
             }
@@ -219,7 +220,13 @@ public class UsuarioCadastro extends JDialogCadastro {
             MensageiroUtils.mensagemAlerta(this, "A senha e a confirmação não são iguais!");
             return false;
         }
-        usuario.setIdGrupoPermissao(1L);
+        SelectItemVO itemGrupo = ((ComboModel) comboGrupoPermissao.getModel()).getSelectedItem();
+        if (itemGrupo.getId() != null) {
+            usuario.setIdGrupoPermissao(itemGrupo.getId());
+        } else {
+            MensageiroUtils.mensagemAlerta(this, "Selecione um grupo de permissão!");
+            return false;
+        }
         return true;
     }
 
@@ -232,10 +239,10 @@ public class UsuarioCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
-//            if (usuarioDAO.registroExiste(usuario)) {
-//                mostrarMensagemExistente();
-//            } else {
-                
+            Usuario usuarioAux = usuarioDao.buscarPorLogin(usuario);
+            if (usuarioAux != null) {
+                MensageiroUtils.mensagemAlerta(this, "Já existe um usuário cadastrado com este login!");
+            } else {
                 usuarioDao.gravar(usuario);
                 mostrarMensagemSucesso();
 
@@ -243,7 +250,7 @@ public class UsuarioCadastro extends JDialogCadastro {
                     ((UsuarioLista) getCadastroAnterior()).pesquisar();
                 }
                 dispose();
-//            }
+            }
         } catch (Exception e) {
             ExceptionUtils.mostrarErro(this, e.getMessage());
         }

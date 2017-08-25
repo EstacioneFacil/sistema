@@ -36,7 +36,7 @@ public class MenuController {
                     jMenu.add(new JSeparator());
                     grupo = subMenu.getGrupo();
                 }
-                jSubMenu.addActionListener(new MenuAcoes(subMenu.getId()));
+                jSubMenu.addActionListener(new MenuAcoes(subMenu.getAcao()));
                 jMenu.add(jSubMenu);
                 montarSubMenus(subMenu, jSubMenu);
             } else {
@@ -45,7 +45,7 @@ public class MenuController {
                     jMenu.add(new JSeparator());
                     grupo = subMenu.getGrupo();
                 }
-                jSubMenuAux.addActionListener(new MenuAcoes(subMenu.getId()));
+                jSubMenuAux.addActionListener(new MenuAcoes(subMenu.getAcao()));
                 jMenu.add(jSubMenuAux);
                 montarSubMenus(subMenu, jMenu);
             }
@@ -57,26 +57,26 @@ public class MenuController {
         List<Menu> menusConsulta = new MenuDao().buscarMenu();
 
         for (Menu menu : menusConsulta) {
-            if (menu.getIdMenu() == null) {
+            if (menu.getMenuPai() == null) {
                 if (menu.getSubMenus() == null) {
                     menu.setSubMenus(new ArrayList<Menu>());
                 }
-                menu.getSubMenus().addAll(organizarSubMenu(menusConsulta, menu.getId()));
+                menu.getSubMenus().addAll(organizarSubMenu(menusConsulta, menu.getMenu()));
                 menus.add(menu);
             }
         }
         return menus;
     }
 
-    private List<Menu> organizarSubMenu(List<Menu> menus, Long idMenu) {
+    private List<Menu> organizarSubMenu(List<Menu> menus, Integer menu) {
         List<Menu> subMenus = new ArrayList();
-        for (Menu menu : menus) {
-            if ((menu.getIdMenu() != null) && (menu.getIdMenu().equals(idMenu))) {
-                if (menu.getSubMenus() == null) {
-                    menu.setSubMenus(new ArrayList<Menu>());
+        for (Menu m : menus) {
+            if ((m.getMenuPai() != null) && (m.getMenuPai().equals(menu))) {
+                if (m.getSubMenus() == null) {
+                    m.setSubMenus(new ArrayList<Menu>());
                 }
-                menu.getSubMenus().addAll(organizarSubMenu(menus, menu.getId()));
-                subMenus.add(menu);
+                m.getSubMenus().addAll(organizarSubMenu(menus, m.getMenu()));
+                subMenus.add(m);
             }
         }
         return subMenus;

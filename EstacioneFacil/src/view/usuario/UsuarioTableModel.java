@@ -11,7 +11,7 @@ import view.classes.TableModel;
 public class UsuarioTableModel extends TableModel {
 
     private List<Usuario> dados;
-    private String[] colunas = {"Nome", "Login", "Grupo de Permissão", "Id"};
+    private String[] colunas = {"Nome", "Login", "Grupo de Permissão", "ID"};
 
     public UsuarioTableModel(List<Usuario> usuarios) {
         this.dados = usuarios;

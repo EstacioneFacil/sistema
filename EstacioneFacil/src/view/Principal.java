@@ -30,6 +30,8 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jMenuBar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
         jMenu1.setText("File");
         jMenuBar.add(jMenu1);
 

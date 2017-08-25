@@ -12,7 +12,7 @@ public class PrincipalMain {
         iniciarSistema();
     }
 
-    public static void iniciarSistema() {         
+    public static void iniciarSistema() {               
         Login login = new Login();
         CredencialVO credencialVO = login.openLogin();
         ConfiguracaoSistema.setUsuarioLogado(credencialVO.getUsuario());

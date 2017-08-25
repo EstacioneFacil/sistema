@@ -7,8 +7,12 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.Usuario;
+import model.vo.SelectItemVO;
+import model.vo.UsuarioFiltroVO;
 import org.apache.log4j.Logger;
 import util.ExceptionUtils;
+import view.classes.ComboModel;
+import view.classes.CombosDinamicos;
 import view.classes.JDialogLista;
 
 /**
@@ -20,12 +24,17 @@ public class UsuarioLista extends JDialogLista {
     private final Logger logger = Logger.getLogger(getClass().getName());
     
     private UsuarioDao usuarioDao;
+    private UsuarioFiltroVO usuarioFiltroVO;
     
     public UsuarioLista() {
         super("Usuários");
         initComponents();
         
         usuarioDao = new UsuarioDao();
+        usuarioFiltroVO = new UsuarioFiltroVO();
+        
+        comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(false)));
+        ((ComboModel) comboGrupoPermissao.getModel()).setSelectedIndex(0);
         
         carregarLista();
     }
@@ -34,7 +43,7 @@ public class UsuarioLista extends JDialogLista {
         List<Usuario> dados = new ArrayList<>();
         try {
             logger.debug("Buscando registros de usuarios");
-            dados = usuarioDao.findAll();
+            dados = usuarioDao.consultar(usuarioFiltroVO);
         } catch(Exception e) {
             logger.error("Não foi possível carregar a lista de usuários!", e);
             ExceptionUtils.mostrarErro(this, "Não foi possível carregar a lista de usuários!");
@@ -46,10 +55,13 @@ public class UsuarioLista extends JDialogLista {
     }
     
     public void pesquisar() {
-//        usuarioFiltroVO.setSituacao(SituacaoEnum.getByLabel(comboSituacao.getSelectedItem().toString()).getKey());
-//        usuarioFiltroVO.setPesquisa(txtPesquisar.getText());
-//        
-//        carregarLista(usuarioFiltroVO);
+        usuarioFiltroVO.setPesquisa(txtPesquisar.getText());
+        
+        SelectItemVO itemGrupo = ((ComboModel) comboGrupoPermissao.getModel()).getSelectedItem();
+        if (itemGrupo != null) {
+            usuarioFiltroVO.setIdGrupoPermissao(itemGrupo.getId());
+        }
+
         carregarLista();
     }
     
@@ -262,9 +274,9 @@ public class UsuarioLista extends JDialogLista {
         try {
             Usuario usuario = getLinhaSelecionada();
             if (excluir(usuario)) {
-//                usuarioDao.excluir(usuario);
-//                mostrarMensagemExcluido();
-//                pesquisar();
+                usuarioDao.excluir(usuario);
+                mostrarMensagemExcluido();
+                pesquisar();
             }
         } catch(Exception e) {
             logger.error("Não foi possível excluir o registro!", e);

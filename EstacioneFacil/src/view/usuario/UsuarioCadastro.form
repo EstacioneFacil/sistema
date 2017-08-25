@@ -208,6 +208,7 @@
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Gp. Permiss&#xe3;o:*"/>
+        <Property name="toolTipText" type="java.lang.String" value="Grupo de Permiss&#xe3;o"/>
       </Properties>
     </Component>
   </SubComponents>

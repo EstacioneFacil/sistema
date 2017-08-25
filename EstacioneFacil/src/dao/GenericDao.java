@@ -4,7 +4,12 @@ import util.HibernateUtil;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import model.vo.FiltroVO;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 public class GenericDao<T extends Serializable> {
@@ -57,4 +62,21 @@ public class GenericDao<T extends Serializable> {
         return (T) getSession().createCriteria(persistentClass)
                 .add(Restrictions.eq("id", id)).uniqueResult();
     }
+
+    
+    //NAO IMPLEMENTADO
+//    public Disjunction montarFiltro(Criteria crit, FiltroVO filtroVO) {
+//        //retorna nome de todas colunas da entidade passada por parametro
+//        String[] colunas = HibernateUtil.sessionFactory.getClassMetadata(persistentClass).getPropertyNames();
+//        Criterion[] predicates = new Criterion[colunas.length + 1];
+//
+//        //acrescenta a coluna id manualmente pois nao aparece na busca a cima
+//        int cont = 0;
+////        predicates[cont] = Restrictions.sqlRestriction("id LIKE '%"+filtroVO.getPesquisa()+"%' ");
+//        for (int i = 0; i < colunas.length; i++) {
+//            cont++;
+//            predicates[cont] = Restrictions.like(colunas[i], filtroVO.getPesquisa(), MatchMode.ANYWHERE);
+//        }
+//        return Restrictions.or(predicates);
+//    }
 }

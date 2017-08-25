@@ -11,7 +11,7 @@ import view.classes.TableModel;
 public class GrupoPermissaoTableModel extends TableModel {
 
     private List<GrupoPermissao> dados;
-    private String[] colunas = {"Descrição", "Id"};
+    private String[] colunas = {"Descrição", "ID"};
 
     public GrupoPermissaoTableModel(List<GrupoPermissao> gruposPermissao) {
         this.dados = gruposPermissao;
