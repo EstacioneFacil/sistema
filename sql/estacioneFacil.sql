@@ -16,6 +16,15 @@ CREATE TABLE area (
 ALTER TABLE area ADD CONSTRAINT PK_area PRIMARY KEY (id);
 
 
+CREATE TABLE botao (
+ id SERIAL NOT NULL,
+ descricao VARCHAR(255),
+ nome_variavel VARCHAR(255)
+);
+
+ALTER TABLE botao ADD CONSTRAINT PK_botao PRIMARY KEY (id);
+
+
 CREATE TABLE grupo_permissao (
  id SERIAL NOT NULL,
  descricao VARCHAR(255) NOT NULL
@@ -37,17 +46,32 @@ CREATE TABLE menu (
 ALTER TABLE menu ADD CONSTRAINT PK_menu PRIMARY KEY (id);
 
 
+CREATE TABLE menu_botao (
+ id SERIAL NOT NULL,
+ menu_id SERIAL NOT NULL,
+ botao_id SERIAL NOT NULL
+);
+
+ALTER TABLE menu_botao ADD CONSTRAINT PK_menu_botao PRIMARY KEY (id);
+
 CREATE TABLE permissao (
  id SERIAL NOT NULL,
  grupo_permissao_id SERIAL NOT NULL,
  menu_id SERIAL NOT NULL,
- visualizar BOOLEAN DEFAULT true NOT NULL,
- inserir BOOLEAN DEFAULT true NOT NULL,
- editar BOOLEAN DEFAULT true NOT NULL,
- excluir BOOLEAN DEFAULT true NOT NULL
+ visualizar BOOLEAN DEFAULT true NOT NULL
 );
 
 ALTER TABLE permissao ADD CONSTRAINT PK_permissao PRIMARY KEY (id);
+
+
+CREATE TABLE permissao_botao (
+ id SERIAL NOT NULL,
+ menu_botao_id SERIAL NOT NULL,
+ permissao_id SERIAL NOT NULL,
+ permissao BOOLEAN
+);
+
+ALTER TABLE permissao_botao ADD CONSTRAINT PK_permissao_botao PRIMARY KEY (id);
 
 
 CREATE TABLE tipo_veiculo (
@@ -63,7 +87,8 @@ CREATE TABLE usuario (
  nome VARCHAR(255) NOT NULL,
  senha VARCHAR(255) NOT NULL,
  login VARCHAR(10) NOT NULL,
- grupo_permissao_id SERIAL NOT NULL
+ grupo_permissao_id SERIAL NOT NULL,
+ excluido BOOLEAN
 );
 
 ALTER TABLE usuario ADD CONSTRAINT PK_usuario PRIMARY KEY (id);
@@ -167,8 +192,8 @@ INSERT INTO grupo_permissao (descricao) VALUES ('Administrador');
 INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administrador', 'KM09KLhJyl0=', 'admin', 1);
 
 
-INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar, inserir, editar, excluir) VALUES (1, 3, true, true, true, true);
-INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar, inserir, editar, excluir) VALUES (1, 4, true, true, true, true);
+INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 3, true);
+INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 4, true);
 
 
 -- VIEW
