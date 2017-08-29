@@ -88,7 +88,7 @@ CREATE TABLE usuario (
  senha VARCHAR(255) NOT NULL,
  login VARCHAR(10) NOT NULL,
  grupo_permissao_id SERIAL NOT NULL,
- excluido BOOLEAN
+ excluido BOOLEAN DEFAULT false
 );
 
 ALTER TABLE usuario ADD CONSTRAINT PK_usuario PRIMARY KEY (id);
@@ -194,6 +194,15 @@ INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administra
 
 INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 3, true);
 INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 4, true);
+
+
+--PERMISSAO BOTAO
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (3, 1);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (3, 2);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (3, 3);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (4, 1);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (4, 2);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (4, 3);
 
 
 -- VIEW
