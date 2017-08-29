@@ -37,6 +37,8 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "grupo_permissao_id", insertable = false, updatable = false)
     private GrupoPermissao grupoPermissao;
 
+    @Column(name = "excluido")
+    private boolean excluido;
     
     public Long getId() {
         return id;
@@ -84,5 +86,13 @@ public class Usuario implements Serializable {
 
     public void setGrupoPermissao(GrupoPermissao grupoPermissao) {
         this.grupoPermissao = grupoPermissao;
+    }
+
+    public boolean isExcluido() {
+        return excluido;
+    }
+
+    public void setExcluido(boolean excluido) {
+        this.excluido = excluido;
     }
 }

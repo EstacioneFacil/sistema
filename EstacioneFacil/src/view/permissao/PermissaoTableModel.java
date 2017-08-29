@@ -11,7 +11,7 @@ import model.Permissao;
 public class PermissaoTableModel extends AbstractTableModel {
 
     private List<Permissao> dados;
-    private String[] colunas = {"Tela", "Visualizar", "Inserir", "Editar", "Excluir"};
+    private String[] colunas = {"Tela", "Visualizar", "Permissões da tela"};
 
     public PermissaoTableModel(List<Permissao> permissoes) {
         this.dados = permissoes;
@@ -37,18 +37,18 @@ public class PermissaoTableModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex == 0) {
-            return Object.class;
+        if (columnIndex == 1) {
+            return Boolean.class;
         }
-        return Boolean.class;
+        return Object.class;
     }
     
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (columnIndex == 0) {
-            return false;
+        if (columnIndex == 1) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -58,12 +58,6 @@ public class PermissaoTableModel extends AbstractTableModel {
                 return dados.get(rowIndex).getMenu().getDescricao();
             case 1:
                 return dados.get(rowIndex).isVisualizar();
-            case 2:
-                return dados.get(rowIndex).isInserir();
-            case 3:
-                return dados.get(rowIndex).isEditar();
-            case 4:
-                return dados.get(rowIndex).isExcluir();
         }
         return null;
     }
@@ -73,12 +67,6 @@ public class PermissaoTableModel extends AbstractTableModel {
         Permissao permissao = dados.get(rowIndex);
         if (columnIndex == 1) {
             permissao.setVisualizar(!permissao.isVisualizar());
-        } else if (columnIndex == 2) {
-            permissao.setInserir(!permissao.isInserir());
-        } else if (columnIndex == 3) {
-            permissao.setEditar(!permissao.isEditar());
-        } else if (columnIndex == 4) {
-            permissao.setExcluir(!permissao.isExcluir());
         }
     }
 

@@ -1,13 +1,19 @@
 package view.grupoPermissao;
 
-import controller.permissao.PermissaoController;
+import controller.PermissaoBotaoController;
+import controller.PermissaoController;
 import dao.GrupoPermissaoDao;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import model.GrupoPermissao;
 import model.Permissao;
+import model.PermissaoBotao;
 import util.ExceptionUtils;
 import util.MensageiroUtils;
 import view.classes.JDialogCadastro;
+import view.permissao.PermissaoTableCellRender;
 import view.permissao.PermissaoTableModel;
 
 
@@ -87,6 +93,11 @@ public class GrupoPermissaoCadastro extends JDialogCadastro {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPermissoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPermissoesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPermissoes);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -155,6 +166,10 @@ public class GrupoPermissaoCadastro extends JDialogCadastro {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void tblPermissoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPermissoesMouseClicked
+        definirPermissoesTela(evt);
+    }//GEN-LAST:event_tblPermissoesMouseClicked
+
     public void carregarCadastro() {
         carregarListaPermissoes();
         if (grupoPermissao.getId() != null) {
@@ -173,11 +188,28 @@ public class GrupoPermissaoCadastro extends JDialogCadastro {
         this.tblPermissoes.setSelectionMode(0);
         this.tblPermissoes.setRowHeight(25);
         
-        this.tblPermissoes.getColumnModel().getColumn(0).setPreferredWidth(300);
+        PermissaoTableCellRender cellRender = new PermissaoTableCellRender();
+        this.tblPermissoes.getColumnModel().getColumn(0).setPreferredWidth(250);
         this.tblPermissoes.getColumnModel().getColumn(1).setPreferredWidth(50);
-        this.tblPermissoes.getColumnModel().getColumn(2).setPreferredWidth(50);
-        this.tblPermissoes.getColumnModel().getColumn(3).setPreferredWidth(50);
-        this.tblPermissoes.getColumnModel().getColumn(4).setPreferredWidth(50);
+        this.tblPermissoes.getColumnModel().getColumn(2).setPreferredWidth(100);
+        this.tblPermissoes.getColumnModel().getColumn(2).setCellRenderer(cellRender);
+    }
+    
+    private void definirPermissoesTela(MouseEvent evt) {
+        Permissao permissao = ((PermissaoTableModel) tblPermissoes.getModel()).getDados().get(tblPermissoes.getSelectedRow());
+        int coluna = tblPermissoes.columnAtPoint(evt.getPoint());
+        
+        if (coluna == 2) {
+            if (!permissao.isVisualizar()) {
+                MensageiroUtils.mensagemAlerta(this, "Selecione primeiro a permissão de visualização da tela!");
+            } else {
+                
+                List<PermissaoBotao> permissaobotoes = new PermissaoBotaoController().getListaBotoesPermissoes(permissao);
+                for (PermissaoBotao permissaoBotao : permissaobotoes) {
+                    System.out.println(permissaoBotao.getMenuBotao().getBotao().getDescricao());
+                }
+            }
+        }
     }
     
     public boolean verificaCamposObrigatorios() {

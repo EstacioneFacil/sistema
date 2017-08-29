@@ -12,21 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "permissao")
-public class Permissao implements Serializable {
+@Table(name = "menu_botao")
+public class MenuBotao implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
- 
-    @Column(name = "grupo_permissao_id")
-    private Long idGrupoPermissao;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "grupo_permissao_id", insertable = false, updatable = false)
-    private GrupoPermissao grupoPermissao;
     
     @Column(name = "menu_id")
     private Long idMenu;
@@ -35,9 +28,13 @@ public class Permissao implements Serializable {
     @JoinColumn(name = "menu_id", insertable = false, updatable = false)
     private Menu menu;
     
-    @Column(name = "visualizar")
-    private boolean visualizar;
+    @Column(name = "botao_id")
+    private Long idBotao;
     
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "botao_id", insertable = false, updatable = false)
+    private Botao botao;
+        
     
     public Long getId() {
         return id;
@@ -45,22 +42,6 @@ public class Permissao implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getIdGrupoPermissao() {
-        return idGrupoPermissao;
-    }
-
-    public void setIdGrupoPermissao(Long idGrupoPermissao) {
-        this.idGrupoPermissao = idGrupoPermissao;
-    }
-
-    public GrupoPermissao getGrupoPermissao() {
-        return grupoPermissao;
-    }
-
-    public void setGrupoPermissao(GrupoPermissao grupoPermissao) {
-        this.grupoPermissao = grupoPermissao;
     }
 
     public Long getIdMenu() {
@@ -79,11 +60,19 @@ public class Permissao implements Serializable {
         this.menu = menu;
     }
 
-    public boolean isVisualizar() {
-        return visualizar;
+    public Long getIdBotao() {
+        return idBotao;
     }
 
-    public void setVisualizar(boolean visualizar) {
-        this.visualizar = visualizar;
+    public void setIdBotao(Long idBotao) {
+        this.idBotao = idBotao;
+    }
+
+    public Botao getBotao() {
+        return botao;
+    }
+
+    public void setBotao(Botao botao) {
+        this.botao = botao;
     }
 }

@@ -22,7 +22,10 @@ public class UsuarioDao extends GenericDao<Usuario> {
     }
     
     public void excluir(Usuario usuario) {
-        delete(usuario);
+        if (usuario != null) {
+            usuario.setExcluido(true);
+            gravar(usuario);
+        }
     }
     
     public List<Usuario> consultar(UsuarioFiltroVO filtroVO) {
@@ -57,6 +60,7 @@ public class UsuarioDao extends GenericDao<Usuario> {
                 crit.add(critPesquisa);
             }
         }
+        crit.add(Restrictions.eq("excluido", false));
         return crit.list();
     }
 

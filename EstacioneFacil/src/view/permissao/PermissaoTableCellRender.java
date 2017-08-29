@@ -3,6 +3,7 @@ package view.permissao;
 import view.grupoPermissao.*;
 import view.usuario.*;
 import java.awt.Component;
+import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -20,6 +21,9 @@ public class PermissaoTableCellRender extends DefaultTableCellRenderer implement
         if (column == 0) {
             setHorizontalAlignment(LEFT);
         } else {
+            if (column == 2) {
+                setText("<html><u>Clique para definir</u></html>");
+            }
             setHorizontalAlignment(CENTER);
         }
         return this;

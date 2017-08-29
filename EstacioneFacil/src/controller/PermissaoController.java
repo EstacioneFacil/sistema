@@ -1,4 +1,4 @@
-package controller.permissao;
+package controller;
 
 import dao.MenuDao;
 import dao.PermissaoDao;
@@ -33,9 +33,6 @@ public class PermissaoController {
                 permissao.setMenu(menu);
                 permissao.setIdMenu(menu.getId());
                 permissao.setVisualizar(true);
-                permissao.setInserir(true);
-                permissao.setEditar(true);
-                permissao.setExcluir(true);
                 permissoes.add(permissao);
             }
         }
