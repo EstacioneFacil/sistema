@@ -19,7 +19,7 @@ ALTER TABLE area ADD CONSTRAINT PK_area PRIMARY KEY (id);
 CREATE TABLE botao (
  id SERIAL NOT NULL,
  descricao VARCHAR(255),
- nome_variavel VARCHAR(255)
+ nome VARCHAR(255)
 );
 
 ALTER TABLE botao ADD CONSTRAINT PK_botao PRIMARY KEY (id);
@@ -38,9 +38,8 @@ CREATE TABLE menu (
  descricao VARCHAR(255) NOT NULL,
  ordem INT,
  grupo INT,
- menu INT,
  menu_pai INT,
- acao VARCHAR(100) 
+ classe VARCHAR(100) 
 );
 
 ALTER TABLE menu ADD CONSTRAINT PK_menu PRIMARY KEY (id);
@@ -180,10 +179,10 @@ ALTER TABLE movimentacao ADD CONSTRAINT FK_movimentacao_3 FOREIGN KEY (tabela_pr
 
 
 -- INSERTS
-INSERT INTO menu (descricao, ordem, grupo, menu) VALUES ('Cadastro', 1, 1, 1);
-INSERT INTO menu (descricao, ordem, grupo, menu) VALUES ('Usuários', 2, 1, 2);
-INSERT INTO menu (descricao, ordem, grupo, menu, menu_pai, acao) VALUES ('Administrar Usuários', 1, 1, 3, 2, 'menuUsuario');
-INSERT INTO menu (descricao, ordem, grupo, menu, menu_pai, acao) VALUES ('Grupos de Permissão', 2, 1, 4, 2, 'menuGrupoPermissao');
+INSERT INTO menu (descricao, ordem, grupo) VALUES ('Cadastro', 1, 1);
+INSERT INTO menu (descricao, ordem, grupo) VALUES ('Usuários', 2, 1);
+INSERT INTO menu (descricao, ordem, grupo, menu_pai, classe) VALUES ('Administrar Usuários', 1, 1, 2, 'view.usuario.UsuarioLista');
+INSERT INTO menu (descricao, ordem, grupo, menu_pai, classe) VALUES ('Grupos de Permissão', 2, 1, 2, 'view.grupoPermissao.GrupoPermissaoLista');
 
 
 INSERT INTO grupo_permissao (descricao) VALUES ('Administrador');
@@ -195,6 +194,10 @@ INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administra
 INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 3, true);
 INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 4, true);
 
+--BOTAO
+INSERT INTO botao (descricao, nome) VALUES ('Incluir', 'btnIncluir');
+INSERT INTO botao (descricao, nome) VALUES ('Editar', 'btnEditar');
+INSERT INTO botao (descricao, nome) VALUES ('Excluir', 'btnExcluir');
 
 --PERMISSAO BOTAO
 INSERT INTO menu_botao (menu_id, botao_id) VALUES (3, 1);
@@ -207,9 +210,9 @@ INSERT INTO menu_botao (menu_id, botao_id) VALUES (4, 3);
 
 -- VIEW
 CREATE VIEW buscar_menu AS
-SELECT m.id, m.descricao, m.ordem, m.grupo, m.menu, m.menu_pai, m.acao FROM menu m WHERE menu_pai IS NULL
+SELECT m.id, m.descricao, m.ordem, m.grupo, m.menu_pai, m.classe FROM menu m WHERE menu_pai IS NULL
 UNION
-SELECT m.id, m.descricao, m.ordem, m.grupo, m.menu, m.menu_pai, m.acao FROM menu m
+SELECT m.id, m.descricao, m.ordem, m.grupo, m.menu_pai, m.classe FROM menu m
 INNER JOIN permissao p ON p.menu_id = m.id
 INNER JOIN grupo_permissao gp ON p.grupo_permissao_id = gp.id
 INNER JOIN usuario u ON u.grupo_permissao_id = gp.id
