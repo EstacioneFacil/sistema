@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-import model.Area;
 import model.Menu;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
@@ -18,15 +17,14 @@ public class MenuDao extends GenericDao<Menu> {
     }
 
     public List<Menu> buscarMenu() {
-        SQLQuery sqlQuery = getSession().createSQLQuery("select m.id, m.descricao, m.ordem, m.grupo, m.menu, m.menu_pai as menuPai, m.acao from buscar_menu m order by m.ordem asc");
+        SQLQuery sqlQuery = getSession().createSQLQuery("select m.id, m.descricao, m.ordem, m.grupo, m.menu_pai as menuPai, m.classe from buscar_menu m order by m.ordem asc");
         
         sqlQuery.addScalar("id", LongType.INSTANCE);
         sqlQuery.addScalar("descricao", StringType.INSTANCE);
         sqlQuery.addScalar("ordem", IntegerType.INSTANCE);
         sqlQuery.addScalar("grupo", IntegerType.INSTANCE);
-        sqlQuery.addScalar("menu", IntegerType.INSTANCE);
-        sqlQuery.addScalar("menuPai", IntegerType.INSTANCE);
-        sqlQuery.addScalar("acao", StringType.INSTANCE);
+        sqlQuery.addScalar("menuPai", LongType.INSTANCE);
+        sqlQuery.addScalar("classe", StringType.INSTANCE);
         sqlQuery.setResultTransformer(Transformers.aliasToBean(Menu.class));
         
         return sqlQuery.list();

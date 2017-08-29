@@ -5,6 +5,8 @@ import model.MenuBotao;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
+
+
 public class MenuBotaoDao extends GenericDao<MenuBotao> {
 
     public MenuBotaoDao() {
@@ -12,14 +14,9 @@ public class MenuBotaoDao extends GenericDao<MenuBotao> {
     }
     
     public List<MenuBotao> buscarPermissoesBotoes(Long idMenu) {
-        try {
-            Criteria crit = getSession().createCriteria(MenuBotao.class);
-            crit.add(Restrictions.eq("idMenu", idMenu));
-            return crit.list();
-        } catch(Exception e) {
-            e.printStackTrace();;
-        }
-        return null;
+        Criteria crit = getSession().createCriteria(MenuBotao.class);
+        crit.add(Restrictions.eq("idMenu", idMenu));
+        return crit.list();
     }
 
 }

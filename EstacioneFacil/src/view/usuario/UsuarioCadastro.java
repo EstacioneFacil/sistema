@@ -1,7 +1,6 @@
 package view.usuario;
 
 import dao.UsuarioDao;
-import javax.swing.DefaultComboBoxModel;
 import model.Usuario;
 import model.util.MD5Encryption;
 import model.vo.SelectItemVO;

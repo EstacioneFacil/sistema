@@ -21,11 +21,11 @@ public class PermissaoBotao implements Serializable {
     @Column(name = "id")
     private Long id;
     
-    @Column(name = "menu_bota_id")
+    @Column(name = "menu_botao_id")
     private Long idMenuBotao;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "menu_bota_id", insertable = false, updatable = false)
+    @JoinColumn(name = "menu_botao_id", insertable = false, updatable = false)
     private MenuBotao menuBotao;
     
     @Column(name = "permissao_id")

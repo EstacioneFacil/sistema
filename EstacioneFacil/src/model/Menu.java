@@ -28,15 +28,12 @@ public class Menu implements Serializable {
     
     @Column(name = "grupo")
     private Integer grupo;
-    
-    @Column(name = "menu")
-    private Integer menu;
-    
+        
     @Column(name = "menu_pai")
-    private Integer menuPai;
+    private Long menuPai;
     
-    @Column(name = "acao")
-    private String acao;
+    @Column(name = "classe")
+    private String classe;
 
     @Transient
     private List<Menu> subMenus;
@@ -82,27 +79,19 @@ public class Menu implements Serializable {
         this.subMenus = subMenus;
     }
 
-    public Integer getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Integer menu) {
-        this.menu = menu;
-    }
-
-    public Integer getMenuPai() {
+    public Long getMenuPai() {
         return menuPai;
     }
 
-    public void setMenuPai(Integer menuPai) {
+    public void setMenuPai(Long menuPai) {
         this.menuPai = menuPai;
     }
 
-    public String getAcao() {
-        return acao;
+    public String getClasse() {
+        return classe;
     }
 
-    public void setAcao(String acao) {
-        this.acao = acao;
+    public void setClasse(String classe) {
+        this.classe = classe;
     }
 }

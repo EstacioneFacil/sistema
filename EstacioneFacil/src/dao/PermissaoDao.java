@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-import model.Menu;
 import model.Permissao;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;

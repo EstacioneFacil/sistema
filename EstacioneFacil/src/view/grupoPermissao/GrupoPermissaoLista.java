@@ -29,6 +29,8 @@ public class GrupoPermissaoLista extends JDialogLista {
         super("Grupos de Permissão");
         initComponents();
         
+        definirPermissoes(btnIncluir, btnEditar, btnExcluir);
+        
         grupoPermissaoDao = new GrupoPermissaoDao();
         grupoPermissaoFiltroVO = new GrupoPermissaoFiltroVO();
         
@@ -114,6 +116,7 @@ public class GrupoPermissaoLista extends JDialogLista {
         btnIncluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/add.png"))); // NOI18N
         btnIncluir.setText("Incluir");
+        btnIncluir.setName("btnIncluir"); // NOI18N
         btnIncluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIncluirActionPerformed(evt);
@@ -123,6 +126,7 @@ public class GrupoPermissaoLista extends JDialogLista {
         btnExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/delete.png"))); // NOI18N
         btnExcluir.setText("Excluir");
+        btnExcluir.setName("btnExcluir"); // NOI18N
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirActionPerformed(evt);
@@ -148,6 +152,7 @@ public class GrupoPermissaoLista extends JDialogLista {
         btnEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/edit.png"))); // NOI18N
         btnEditar.setText("Editar");
+        btnEditar.setName("btnEditar"); // NOI18N
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);

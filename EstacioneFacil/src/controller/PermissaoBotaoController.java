@@ -1,9 +1,9 @@
 package controller;
 
 import dao.MenuBotaoDao;
+import dao.PermissaoBotaoDao;
 import java.util.ArrayList;
 import java.util.List;
-import model.Menu;
 import model.MenuBotao;
 import model.Permissao;
 import model.PermissaoBotao;
@@ -15,12 +15,30 @@ import model.PermissaoBotao;
 public class PermissaoBotaoController {
     
     private MenuBotaoDao menuBotaoDao;
+    private PermissaoBotaoDao permissaoBotaoDao;
 
     public PermissaoBotaoController() {
         this.menuBotaoDao = new MenuBotaoDao();
+        this.permissaoBotaoDao = new PermissaoBotaoDao();
     }
     
     public List<PermissaoBotao> getListaBotoesPermissoes(Permissao permissao) {
+        List<PermissaoBotao> permissaoBotoes = new ArrayList<>();
+        
+        if (permissao.getId() != null) {
+            permissaoBotoes = permissaoBotaoDao.buscarPermissaoBotoes(permissao.getId());
+            
+            if (permissaoBotoes != null && permissaoBotoes.isEmpty()) {
+                permissaoBotoes = getBotoesPermissoes(permissao);
+            }
+        } else {
+            permissaoBotoes = getBotoesPermissoes(permissao);
+        }
+        return permissaoBotoes;
+    }
+    
+    
+    private List<PermissaoBotao> getBotoesPermissoes(Permissao permissao) {
         List<PermissaoBotao> permissaoBotoes = new ArrayList<>();
         List<MenuBotao> menuBotoes = menuBotaoDao.buscarPermissoesBotoes(permissao.getIdMenu());
         for (MenuBotao menuBotao : menuBotoes) {
@@ -33,5 +51,15 @@ public class PermissaoBotaoController {
             permissaoBotoes.add(permissaoBotao);
         }
         return permissaoBotoes;
+    }
+    
+    
+    public void gravarPermissaoBotoes(Permissao permissao) {
+        if (permissao.getPermissaoBotoes() != null) {
+            for (PermissaoBotao permissaoBotao : permissao.getPermissaoBotoes()) {
+                permissaoBotao.setIdPermissao(permissao.getId());
+                permissaoBotaoDao.gravar(permissaoBotao);
+            }
+        }
     }
 }

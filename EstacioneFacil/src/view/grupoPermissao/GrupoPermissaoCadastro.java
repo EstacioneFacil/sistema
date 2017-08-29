@@ -1,20 +1,17 @@
 package view.grupoPermissao;
 
-import controller.PermissaoBotaoController;
 import controller.PermissaoController;
 import dao.GrupoPermissaoDao;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import model.GrupoPermissao;
 import model.Permissao;
-import model.PermissaoBotao;
 import util.ExceptionUtils;
 import util.MensageiroUtils;
 import view.classes.JDialogCadastro;
 import view.permissao.PermissaoTableCellRender;
 import view.permissao.PermissaoTableModel;
+import view.permissao.botao.PermissaoBotaoCadastro;
 
 
 /**
@@ -23,6 +20,7 @@ import view.permissao.PermissaoTableModel;
  */
 public class GrupoPermissaoCadastro extends JDialogCadastro {
     
+    private Permissao permissao;
     private GrupoPermissao grupoPermissao;
     private GrupoPermissaoDao grupoPermissaoDao;
     private PermissaoController permissaoController;
@@ -196,18 +194,15 @@ public class GrupoPermissaoCadastro extends JDialogCadastro {
     }
     
     private void definirPermissoesTela(MouseEvent evt) {
-        Permissao permissao = ((PermissaoTableModel) tblPermissoes.getModel()).getDados().get(tblPermissoes.getSelectedRow());
+        permissao = ((PermissaoTableModel) tblPermissoes.getModel()).getDados().get(tblPermissoes.getSelectedRow());
         int coluna = tblPermissoes.columnAtPoint(evt.getPoint());
         
         if (coluna == 2) {
             if (!permissao.isVisualizar()) {
                 MensageiroUtils.mensagemAlerta(this, "Selecione primeiro a permissão de visualização da tela!");
             } else {
-                
-                List<PermissaoBotao> permissaobotoes = new PermissaoBotaoController().getListaBotoesPermissoes(permissao);
-                for (PermissaoBotao permissaoBotao : permissaobotoes) {
-                    System.out.println(permissaoBotao.getMenuBotao().getBotao().getDescricao());
-                }
+                PermissaoBotaoCadastro permissaoBotaoCadastro = new PermissaoBotaoCadastro(this, permissao);
+                permissao = permissaoBotaoCadastro.abrirTela();
             }
         }
     }
@@ -227,19 +222,15 @@ public class GrupoPermissaoCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }       
-//            if (grupoPermissaoDao.registroExiste(grupoPermissao)) {
-//                mostrarMensagemExistente();
-//            } else {
-                grupoPermissaoDao.gravar(grupoPermissao);
-                permissaoController.gravarPermissoes(grupoPermissao.getId(), permissoes);
-                
-                mostrarMensagemSucesso();
+            grupoPermissaoDao.gravar(grupoPermissao);
+            permissaoController.gravarPermissoes(grupoPermissao.getId(), permissoes);
 
-                if (getCadastroAnterior() instanceof GrupoPermissaoLista) {
-                    ((GrupoPermissaoLista) getCadastroAnterior()).pesquisar();
-                }
-                dispose();
-//            }
+            mostrarMensagemSucesso();
+
+            if (getCadastroAnterior() instanceof GrupoPermissaoLista) {
+                ((GrupoPermissaoLista) getCadastroAnterior()).pesquisar();
+            }
+            dispose();
         } catch(Exception e) {
             ExceptionUtils.mostrarErro(this, "Ocorreu um erro ao gravar o registro!");
         }

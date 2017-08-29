@@ -131,6 +131,7 @@
           <Image iconType="3" name="/view/imagens/add.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Incluir"/>
+        <Property name="name" type="java.lang.String" value="btnIncluir" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIncluirActionPerformed"/>
@@ -145,6 +146,7 @@
           <Image iconType="3" name="/view/imagens/delete.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Excluir"/>
+        <Property name="name" type="java.lang.String" value="btnExcluir" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluirActionPerformed"/>
@@ -246,6 +248,7 @@
           <Image iconType="3" name="/view/imagens/edit.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Editar"/>
+        <Property name="name" type="java.lang.String" value="btnEditar" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>

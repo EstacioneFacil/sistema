@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "permissao")
@@ -38,6 +40,8 @@ public class Permissao implements Serializable {
     @Column(name = "visualizar")
     private boolean visualizar;
     
+    @Transient
+    private List<PermissaoBotao> permissaoBotoes;
     
     public Long getId() {
         return id;
@@ -85,5 +89,13 @@ public class Permissao implements Serializable {
 
     public void setVisualizar(boolean visualizar) {
         this.visualizar = visualizar;
+    }
+
+    public List<PermissaoBotao> getPermissaoBotoes() {
+        return permissaoBotoes;
+    }
+
+    public void setPermissaoBotoes(List<PermissaoBotao> permissaoBotoes) {
+        this.permissaoBotoes = permissaoBotoes;
     }
 }

@@ -21,8 +21,8 @@ public class Botao implements Serializable {
     @Column(name = "descricao")
     private String descricao;
     
-    @Column(name = "nome_variavel")
-    private String nomeVariavel;
+    @Column(name = "nome")
+    private String nome;
     
     
     public Long getId() {
@@ -41,11 +41,11 @@ public class Botao implements Serializable {
         this.descricao = descricao;
     }
 
-    public String getNomeVariavel() {
-        return nomeVariavel;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeVariavel(String nomeVariavel) {
-        this.nomeVariavel = nomeVariavel;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

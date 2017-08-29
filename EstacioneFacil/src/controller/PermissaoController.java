@@ -14,12 +14,14 @@ import model.Permissao;
  */
 public class PermissaoController {
     
-    private PermissaoDao permissaoDao;
     private MenuDao menuDao;
+    private PermissaoDao permissaoDao;
+    private PermissaoBotaoController permissaoBotaoController;
 
     public PermissaoController() {
-        this.permissaoDao = new PermissaoDao();
         this.menuDao = new MenuDao();
+        this.permissaoDao = new PermissaoDao();
+        this.permissaoBotaoController = new PermissaoBotaoController();
     }
     
     public List<Permissao> getListaPermissoes(GrupoPermissao grupoPermissao) {
@@ -43,6 +45,7 @@ public class PermissaoController {
         for (Permissao permissao : permissoes) {
             permissao.setIdGrupoPermissao(idGrupoPermissao);
             permissaoDao.gravar(permissao);
+            permissaoBotaoController.gravarPermissaoBotoes(permissao);
         }
     }
 }
