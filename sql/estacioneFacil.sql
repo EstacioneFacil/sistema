@@ -188,7 +188,7 @@ INSERT INTO menu (descricao, ordem, grupo, menu_pai, classe) VALUES ('Grupos de 
 INSERT INTO grupo_permissao (descricao) VALUES ('Administrador');
 
 
-INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administrador', 'KM09KLhJyl0=', 'admin', 1);
+--INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administrador', 'KM09KLhJyl0=', 'admin', 1);
 
 
 INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 3, true);

@@ -33,7 +33,7 @@ THEN
 	IF NOT EXISTS (SELECT 1 FROM grupo_permissao WHERE descricao = 'Administrador') THEN
 		INSERT INTO grupo_permissao(descricao) VALUES ('Administrador');
 	END IF;
-	INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administrador', 'KM09KLhJyl0', 'admin', (select id from grupo_permissao where descricao = 'Administrador'));
+	INSERT INTO usuario (nome, senha, login, grupo_permissao_id) VALUES ('Administrador', 'KM09KLhJyl0=', 'admin', (select id from grupo_permissao where descricao = 'Administrador'));
 END IF;
 
 RETURN TRUE;
