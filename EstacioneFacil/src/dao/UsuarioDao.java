@@ -78,6 +78,8 @@ public class UsuarioDao extends GenericDao<Usuario> {
         Criteria crit = getSession().createCriteria(Usuario.class);
         crit.add(Restrictions.eq("login", login));
         crit.add(Restrictions.eq("senha", senha));
+        System.out.println(login);
+        System.out.println(senha);
         crit.setMaxResults(1);
         return (Usuario) crit.uniqueResult();
     }
