@@ -1,9 +1,15 @@
 package view.classes;
 
+import dao.AreaDao;
 import dao.GrupoPermissaoDao;
+import dao.TipoVeiculoDao;
+import dao.UsuarioDao;
 import java.util.ArrayList;
 import java.util.List;
+import model.Area;
 import model.GrupoPermissao;
+import model.TipoVeiculo;
+import model.Usuario;
 import model.vo.SelectItemVO;
 
 
@@ -25,5 +31,44 @@ public class CombosDinamicos {
             gruposCombo.add(new SelectItemVO(grupoPermissao.getId(), grupoPermissao.getDescricao()));
         }
         return gruposCombo;
+    }
+    
+    public static List<SelectItemVO> getUsuarios() {
+        List<Usuario> usuarios = new UsuarioDao().buscarTodos();
+        List<SelectItemVO> usuariosCombo = new ArrayList<>();
+       
+        usuariosCombo.add(new SelectItemVO(null, "Todos"));
+        for (Usuario usuario : usuarios) {
+            usuariosCombo.add(new SelectItemVO(usuario.getId(), usuario.getNome()));
+        }
+        return usuariosCombo;
+    }
+    
+    public static List<SelectItemVO> getAreas(boolean cadastro) {
+        List<Area> areas = new AreaDao().buscarTodos();
+        List<SelectItemVO> areasCombo = new ArrayList<>();
+        if (cadastro) {
+            areasCombo.add(new SelectItemVO(null, "Selecione"));
+        } else {
+            areasCombo.add(new SelectItemVO(null, "Todos"));
+        }
+        for (Area area : areas) {
+            areasCombo.add(new SelectItemVO(area.getId(), area.getDescricao()));
+        }
+        return areasCombo;
+    }
+    
+    public static List<SelectItemVO> getTiposVeiculo(boolean cadastro) {
+        List<TipoVeiculo> tiposVeiculo = new TipoVeiculoDao().buscarTodos();
+        List<SelectItemVO> tiposVeiculoCombo = new ArrayList<>();
+        if (cadastro) {
+            tiposVeiculoCombo.add(new SelectItemVO(null, "Selecione"));
+        } else {
+            tiposVeiculoCombo.add(new SelectItemVO(null, "Todos"));
+        }
+        for (TipoVeiculo tipoVeiculo : tiposVeiculo) {
+            tiposVeiculoCombo.add(new SelectItemVO(tipoVeiculo.getId(), tipoVeiculo.getDescricao()));
+        }
+        return tiposVeiculoCombo;
     }
 }

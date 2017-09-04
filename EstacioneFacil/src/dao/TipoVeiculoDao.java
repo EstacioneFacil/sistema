@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-import model.Area;
 import model.TipoVeiculo;
 import model.vo.TipoVeiculoFiltroVO;
 import org.hibernate.Criteria;
@@ -64,4 +63,8 @@ public class TipoVeiculoDao extends GenericDao<TipoVeiculo> {
         return crit.list();
     }
     
+    public List<TipoVeiculo> buscarTodos() {
+        Criteria crit = getSession().createCriteria(TipoVeiculo.class);
+        return crit.list();
+    }
 }

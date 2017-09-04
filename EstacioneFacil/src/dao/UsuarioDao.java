@@ -83,4 +83,9 @@ public class UsuarioDao extends GenericDao<Usuario> {
         crit.setMaxResults(1);
         return (Usuario) crit.uniqueResult();
     }
+    
+    public List<Usuario> buscarTodos() {
+        Criteria crit = getSession().createCriteria(Usuario.class);
+        return crit.list();
+    }
 }

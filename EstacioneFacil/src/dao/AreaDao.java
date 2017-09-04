@@ -62,4 +62,9 @@ public class AreaDao extends GenericDao<Area> {
         }
         return crit.list();
     }
+    
+    public List<Area> buscarTodos() {
+        Criteria crit = getSession().createCriteria(Area.class);
+        return crit.list();
+    }
 }

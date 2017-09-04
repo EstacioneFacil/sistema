@@ -35,9 +35,6 @@ public class AreaLista extends JDialogLista {
         
         areaDao = new AreaDao();
         areaFiltroVO = new AreaFiltroVO();
-        
-        //comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(false)));
-        //((ComboModel) comboGrupoPermissao.getModel()).setSelectedIndex(0);
                 
         carregarLista();
     }
@@ -66,15 +63,12 @@ public class AreaLista extends JDialogLista {
         this.tblAreas.setSelectionMode(0);
         this.tblAreas.setRowHeight(25);
         
-        DefaultTableCellRenderer cellRender = new DefaultTableCellRenderer();
-//        this.tblAreas.getColumnModel().getColumn(0).setPreferredWidth(250);
-//        this.tblAreas.getColumnModel().getColumn(1).setPreferredWidth(100);
-//        this.tblAreas.getColumnModel().getColumn(2).setPreferredWidth(150);
-//        this.tblAreas.getColumnModel().getColumn(3).setCellRenderer(cellRender);
-//        this.tblAreas.getColumnModel().getColumn(3).setPreferredWidth(50);
-         ((DefaultTableCellRenderer) tblAreas.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
+        AreaTableCellRender cellRender = new AreaTableCellRender();
+        this.tblAreas.getColumnModel().getColumn(0).setPreferredWidth(450);
+        this.tblAreas.getColumnModel().getColumn(1).setPreferredWidth(50);
+        this.tblAreas.getColumnModel().getColumn(1).setCellRenderer(cellRender);
+        ((DefaultTableCellRenderer) tblAreas.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
     }
-    
     
     public Area getLinhaSelecionada() {
         if (tblAreas.getSelectedRow() != -1) {
@@ -195,9 +189,9 @@ public class AreaLista extends JDialogLista {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -205,11 +199,11 @@ public class AreaLista extends JDialogLista {
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(lblTotal))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
 
         pack();

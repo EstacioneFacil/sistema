@@ -14,6 +14,7 @@ import model.vo.TipoVeiculoFiltroVO;
 
 import org.apache.log4j.Logger;
 import util.ExceptionUtils;
+import view.area.AreaTableCellRender;
 import view.classes.JDialogLista;
 
 /**
@@ -35,9 +36,6 @@ public class TipoVeiculoLista extends JDialogLista {
         
         tipoVeiculoDao = new TipoVeiculoDao();
         tipoVeiculoFiltroVO = new TipoVeiculoFiltroVO();
-        
-        //comboGrupoPermissao.setModel(new ComboModel(CombosDinamicos.getGruposPermissao(false)));
-        //((ComboModel) comboGrupoPermissao.getModel()).setSelectedIndex(0);
                 
         carregarLista();
     }
@@ -53,7 +51,7 @@ public class TipoVeiculoLista extends JDialogLista {
             logger.error("Não foi possível carregar a lista de areas!", e);
             ExceptionUtils.mostrarErro(this, "Não foi possível carregar a lista de areas!");
         }
-        this.tblAreas.setModel(new TipoVeiculoTableModel(dados));
+        this.tblTipoVeiculo.setModel(new TipoVeiculoTableModel(dados));
         this.lblTotal.setText(String.valueOf(dados.size()));
 
         ajustarTabela();
@@ -65,22 +63,20 @@ public class TipoVeiculoLista extends JDialogLista {
     }
     
     public void ajustarTabela() {
-        this.tblAreas.setSelectionMode(0);
-        this.tblAreas.setRowHeight(25);
+        this.tblTipoVeiculo.setSelectionMode(0);
+        this.tblTipoVeiculo.setRowHeight(25);
         
-        DefaultTableCellRenderer cellRender = new DefaultTableCellRenderer();
-//        this.tblAreas.getColumnModel().getColumn(0).setPreferredWidth(250);
-//        this.tblAreas.getColumnModel().getColumn(1).setPreferredWidth(100);
-//        this.tblAreas.getColumnModel().getColumn(2).setPreferredWidth(150);
-//        this.tblAreas.getColumnModel().getColumn(3).setCellRenderer(cellRender);
-//        this.tblAreas.getColumnModel().getColumn(3).setPreferredWidth(50);
-         ((DefaultTableCellRenderer) tblAreas.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
+        TipoVeiculoTableCellRender cellRender = new TipoVeiculoTableCellRender();
+        this.tblTipoVeiculo.getColumnModel().getColumn(0).setPreferredWidth(450);
+        this.tblTipoVeiculo.getColumnModel().getColumn(1).setPreferredWidth(50);
+        this.tblTipoVeiculo.getColumnModel().getColumn(1).setCellRenderer(cellRender);
+        ((DefaultTableCellRenderer) tblTipoVeiculo.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
     }
     
     
     public TipoVeiculo getLinhaSelecionada() {
-        if (tblAreas.getSelectedRow() != -1) {
-            return ((TipoVeiculoTableModel) tblAreas.getModel()).getDados().get(tblAreas.getSelectedRow());
+        if (tblTipoVeiculo.getSelectedRow() != -1) {
+            return ((TipoVeiculoTableModel) tblTipoVeiculo.getModel()).getDados().get(tblTipoVeiculo.getSelectedRow());
         }
         return null;
     }
@@ -90,7 +86,7 @@ public class TipoVeiculoLista extends JDialogLista {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAreas = new javax.swing.JTable();
+        tblTipoVeiculo = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         btnIncluir = new javax.swing.JButton();
@@ -101,8 +97,8 @@ public class TipoVeiculoLista extends JDialogLista {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        tblAreas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblAreas.setModel(new javax.swing.table.DefaultTableModel(
+        tblTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblTipoVeiculo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -113,7 +109,7 @@ public class TipoVeiculoLista extends JDialogLista {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblAreas);
+        jScrollPane1.setViewportView(tblTipoVeiculo);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Total de registros:");
@@ -197,9 +193,9 @@ public class TipoVeiculoLista extends JDialogLista {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,11 +203,11 @@ public class TipoVeiculoLista extends JDialogLista {
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(lblTotal))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -263,7 +259,7 @@ public class TipoVeiculoLista extends JDialogLista {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
-    private javax.swing.JTable tblAreas;
+    private javax.swing.JTable tblTipoVeiculo;
     private javax.swing.JTextField txtPesquisar;
     // End of variables declaration//GEN-END:variables
 }
