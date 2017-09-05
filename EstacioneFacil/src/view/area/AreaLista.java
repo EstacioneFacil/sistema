@@ -28,7 +28,7 @@ public class AreaLista extends JDialogLista {
     private AreaFiltroVO areaFiltroVO;
     
     public AreaLista() {
-        super("Areas");
+        super("Áreas");
         initComponents();
                  
         definirPermissoes(btnIncluir, btnEditar, btnExcluir);
@@ -46,7 +46,7 @@ public class AreaLista extends JDialogLista {
             dados = areaDao.consultar(areaFiltroVO);
         } catch(Exception e) {
             logger.error("Não foi possível carregar a lista de areas!", e);
-            ExceptionUtils.mostrarErro(this, "Não foi possível carregar a lista de areas!");
+            ExceptionUtils.mostrarErro(this, "Não foi possível carregar a lista de áreas!");
         }
         this.tblAreas.setModel(new AreaTableModel(dados));
         this.lblTotal.setText(String.valueOf(dados.size()));

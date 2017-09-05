@@ -16,7 +16,7 @@ public class AreaCadastro extends JDialogCadastro {
     private AreaDao areaDao;
 
     public AreaCadastro(Object cadastroAnterior, Area area) {
-        super("Area");
+        super("Área");
         initComponents();
 
         this.area = area;

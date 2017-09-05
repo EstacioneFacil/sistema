@@ -33,7 +33,7 @@ public class MenuDao extends GenericDao<Menu> {
     
     public List<Menu> buscarMenusParaPermissao() {
         Criteria crit = getSession().createCriteria(Menu.class);
-        crit.add(Restrictions.isNotNull("acao"));
+        crit.add(Restrictions.isNotNull("classe"));
         return crit.list();
     }
 }

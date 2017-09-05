@@ -1,7 +1,6 @@
 package view.tipoVeiculo;
 
 import dao.TipoVeiculoDao;
-import view.area.*;
 
 
 import model.TipoVeiculo;
@@ -19,7 +18,7 @@ public class TipoVeiculoCadastro extends JDialogCadastro {
     private TipoVeiculoDao tipoVeiculoDao;
 
     public TipoVeiculoCadastro(Object cadastroAnterior, TipoVeiculo tipoVeiculo) {
-        super("Tipo de veiculo");
+        super("Tipo de Veículo");
         initComponents();
 
         this.tipoVeiculo = tipoVeiculo;
@@ -130,7 +129,7 @@ public class TipoVeiculoCadastro extends JDialogCadastro {
 
     public boolean verificaCamposObrigatorios() {
         if (txtDescricao.getText().trim().equals("")) {
-            MensageiroUtils.mensagemAlerta(this, "Preencha a descricao!");
+            MensageiroUtils.mensagemAlerta(this, "Preencha a descrição!");
             return false;
         } else {
             tipoVeiculo.setDescricao(txtDescricao.getText());
@@ -146,7 +145,7 @@ public class TipoVeiculoCadastro extends JDialogCadastro {
             }
             TipoVeiculo tipoVeiculoAux = tipoVeiculoDao.buscarDescricao(tipoVeiculo.getDescricao());
             if (tipoVeiculoAux != null) {
-                MensageiroUtils.mensagemAlerta(this, "Já existe um tipo de veiculo cadastrado com esta descricao!!");
+                MensageiroUtils.mensagemAlerta(this, "Já existe um tipo de veículo cadastrado com esta descrição!");
             } else {
                 tipoVeiculoDao.gravar(tipoVeiculo);
                 mostrarMensagemSucesso();
