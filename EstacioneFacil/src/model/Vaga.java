@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "vaga")
@@ -39,7 +38,7 @@ public class Vaga implements Serializable {
     @JoinColumn(name = "tipo_veiculo_id", insertable = false, updatable = false)
     private TipoVeiculo tipoVeiculo;
 
-    @Transient
+    @Column(name = "descricao")
     private String descricao;
     
     public Long getId() {

@@ -86,16 +86,15 @@ public class TabelaPrecoLista extends JDialogLista {
         TabelaPrecoTableCellRender cellRender = new TabelaPrecoTableCellRender();
         this.tblTabelaPreco.getColumnModel().getColumn(0).setCellRenderer(cellRender);
         this.tblTabelaPreco.getColumnModel().getColumn(0).setPreferredWidth(100);
+        this.tblTabelaPreco.getColumnModel().getColumn(1).setPreferredWidth(200);
+        this.tblTabelaPreco.getColumnModel().getColumn(2).setPreferredWidth(200);
+        this.tblTabelaPreco.getColumnModel().getColumn(5).setCellRenderer(cellRender);
+        this.tblTabelaPreco.getColumnModel().getColumn(5).setPreferredWidth(80);
         this.tblTabelaPreco.getColumnModel().getColumn(6).setCellRenderer(cellRender);
         this.tblTabelaPreco.getColumnModel().getColumn(6).setPreferredWidth(100);
         this.tblTabelaPreco.getColumnModel().getColumn(7).setCellRenderer(cellRender);
         this.tblTabelaPreco.getColumnModel().getColumn(7).setPreferredWidth(50);
-//        this.tblTabelaPreco.getColumnModel().getColumn(1).setPreferredWidth(100);
-//        this.tblTabelaPreco.getColumnModel().getColumn(2).setPreferredWidth(100);
-//        this.tblTabelaPreco.getColumnModel().getColumn(3).setPreferredWidth(200);
-//        this.tblTabelaPreco.getColumnModel().getColumn(4).setCellRenderer(cellRender);
-//        this.tblTabelaPreco.getColumnModel().getColumn(4).setPreferredWidth(50);
-         ((DefaultTableCellRenderer) tblTabelaPreco.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
+        ((DefaultTableCellRenderer) tblTabelaPreco.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(CENTER);
     }
     
     
@@ -311,7 +310,7 @@ public class TabelaPrecoLista extends JDialogLista {
     }//GEN-LAST:event_txtPesquisarKeyPressed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-//        new VagaCadastro(this, new Vaga()).setVisible(true);
+        new TabelaPrecoCadastro(this, new TabelaPreco()).setVisible(true);
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -331,7 +330,7 @@ public class TabelaPrecoLista extends JDialogLista {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         TabelaPreco tabelaPreco = getLinhaSelecionada();
         if (tabelaPreco != null) {
-//            new VagaCadastro(this, vaga).setVisible(true);
+            new TabelaPrecoCadastro(this, tabelaPreco).setVisible(true);
         } else {
             mostrarMensagemEditar();
         }

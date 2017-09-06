@@ -185,7 +185,7 @@ public class VagaCadastro extends JDialogCadastro {
             MensageiroUtils.mensagemAlerta(this, "Preencha a descrição!");
             return false;
         } else {
-//            vaga.setDescricao(txtDescricao.getText());
+            vaga.setDescricao(txtDescricao.getText());
         }
               
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();

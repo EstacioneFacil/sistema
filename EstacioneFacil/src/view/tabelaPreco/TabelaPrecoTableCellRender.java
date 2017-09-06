@@ -17,6 +17,8 @@ public class TabelaPrecoTableCellRender extends DefaultTableCellRenderer impleme
  
         if (column == 0 || column == 6 || column == 7) {
             setHorizontalAlignment(CENTER);
+        } else if (column == 5) {
+            setHorizontalAlignment(RIGHT);
         } else {
             setHorizontalAlignment(LEFT);
         }

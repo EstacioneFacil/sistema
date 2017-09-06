@@ -3,7 +3,7 @@ package view.tabelaPreco;
 import java.util.Date;
 import java.util.List;
 import model.TabelaPreco;
-import util.DateUtils;
+import util.FormatacaoUtils;
 import view.classes.TableModel;
 
 /**
@@ -46,7 +46,7 @@ public class TabelaPrecoTableModel extends TableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return DateUtils.getDataString((Date) dados.get(rowIndex).getDataInicio());
+                return FormatacaoUtils.getDataString((Date) dados.get(rowIndex).getDataInicio());
             case 1:
                 return dados.get(rowIndex).getTipoVeiculo().getDescricao();
             case 2:
@@ -56,9 +56,10 @@ public class TabelaPrecoTableModel extends TableModel {
             case 4:
                 return dados.get(rowIndex).getTipo();
             case 5:
-                return dados.get(rowIndex).getValor();
+                return FormatacaoUtils.formatarStringValor(dados.get(rowIndex).getValor());
             case 6:
-                return DateUtils.getDataString((Date) dados.get(rowIndex).getDataFim());
+                Date dataFim = (Date) dados.get(rowIndex).getDataFim();
+                return dataFim != null ? FormatacaoUtils.getDataString(dataFim) : null;
             case 7:
                 return dados.get(rowIndex).getId();
         }

@@ -34,6 +34,9 @@ public class VagaDao extends GenericDao<Vaga> {
         crit.add(Restrictions.eq("idArea", vaga.getIdArea()));
         crit.add(Restrictions.eq("idTipoVeiculo", vaga.getIdTipoVeiculo()));
         crit.add(Restrictions.eq("codigo", vaga.getCodigo()));
+        if (vaga.getId() != null) {
+            crit.add(Restrictions.ne("id", vaga.getId()));
+        }
         crit.setMaxResults(1);
         return (Vaga) crit.uniqueResult();
     }

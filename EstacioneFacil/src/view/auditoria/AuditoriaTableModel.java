@@ -3,7 +3,7 @@ package view.auditoria;
 import java.util.Date;
 import java.util.List;
 import model.Auditoria;
-import util.DateUtils;
+import util.FormatacaoUtils;
 import view.classes.TableModel;
 
 /**
@@ -46,7 +46,7 @@ public class AuditoriaTableModel extends TableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return DateUtils.getDataHoraString((Date) dados.get(rowIndex).getDataHora());
+                return FormatacaoUtils.getDataHoraString((Date) dados.get(rowIndex).getDataHora());
             case 1:
                 return dados.get(rowIndex).getTabela().toUpperCase();
             case 2:

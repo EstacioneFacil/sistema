@@ -50,7 +50,7 @@ public class VagaTableModel extends TableModel {
             case 2:
                 return dados.get(rowIndex).getTipoVeiculo().getDescricao();
             case 3:
-                return "";
+                return dados.get(rowIndex).getDescricao();
             case 4:
                 return dados.get(rowIndex).getId();
         }

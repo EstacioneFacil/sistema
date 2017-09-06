@@ -5,7 +5,7 @@ import controller.LoginController;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import model.util.MD5Encryption;
+import util.MD5Encryption;
 import model.vo.CredencialVO;
 
 /**
