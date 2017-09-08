@@ -37,6 +37,7 @@ public class HibernateUtil {
             properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
             if (ConfiguracaoSistema.getLogin() != null) {
                 properties.setProperty("hibernate.connection.username", ConfiguracaoSistema.getLogin());
+                properties.setProperty("hibernate.connection.password", "postgres");
             }
             configuration.setProperties(properties);
             
