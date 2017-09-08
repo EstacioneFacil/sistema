@@ -9,7 +9,8 @@ netbeans:
         - ./EstacioneFacil:/home/developer/NetBeansProjects/EstacioneFacil
     environment:
         DISPLAY: :0
-
+    links:
+        - db
 db:
     image: postgres
     volumes:
