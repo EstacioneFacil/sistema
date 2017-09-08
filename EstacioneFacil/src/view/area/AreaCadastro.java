@@ -2,8 +2,8 @@ package view.area;
 
 import dao.AreaDao;
 import model.Area;
-import util.ExceptionUtils;
-import util.MensageiroUtils;
+import model.util.ExceptionUtils;
+import model.util.MensageiroUtils;
 import view.classes.JDialogCadastro;
 
 /**
@@ -143,7 +143,7 @@ public class AreaCadastro extends JDialogCadastro {
             }
             Area areaAux = areaDao.buscarDescricao(area.getDescricao());
             if (areaAux != null) {
-                MensageiroUtils.mensagemAlerta(this, "Já existe uma area cadastrada com esta descricao!!");
+                MensageiroUtils.mensagemAlerta(this, "Já existe uma area cadastrada com esta descrição!");
             } else {
                 areaDao.gravar(area);
                 mostrarMensagemSucesso();

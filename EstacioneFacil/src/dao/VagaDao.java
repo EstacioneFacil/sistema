@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-import model.Usuario;
 import model.Vaga;
 import model.vo.VagaFiltroVO;
 import org.hibernate.Criteria;
@@ -75,6 +74,14 @@ public class VagaDao extends GenericDao<Vaga> {
             if (critPesquisa != null) {
                 crit.add(critPesquisa);
             }
+        }
+        return crit.list();
+    }
+    
+    public List<Vaga> buscarPorArea(Long idArea) {
+        Criteria crit = getSession().createCriteria(Vaga.class);
+        if (idArea != null) {
+            crit.add(Restrictions.eq("idArea", idArea));
         }
         return crit.list();
     }

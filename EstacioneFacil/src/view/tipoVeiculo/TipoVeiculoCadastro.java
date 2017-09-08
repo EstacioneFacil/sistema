@@ -4,8 +4,8 @@ import dao.TipoVeiculoDao;
 
 
 import model.TipoVeiculo;
-import util.ExceptionUtils;
-import util.MensageiroUtils;
+import model.util.ExceptionUtils;
+import model.util.MensageiroUtils;
 import view.classes.JDialogCadastro;
 
 /**

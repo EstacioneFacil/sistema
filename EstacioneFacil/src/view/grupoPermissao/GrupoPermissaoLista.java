@@ -11,7 +11,7 @@ import model.GrupoPermissao;
 import model.Permissao;
 import model.vo.GrupoPermissaoFiltroVO;
 import org.apache.log4j.Logger;
-import util.ExceptionUtils;
+import model.util.ExceptionUtils;
 import view.classes.JDialogLista;
 
 /**

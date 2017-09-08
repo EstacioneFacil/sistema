@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import model.vo.PermissaoBotaoVO;
-import util.MensageiroUtils;
+import model.util.MensageiroUtils;
 
 /**
  *

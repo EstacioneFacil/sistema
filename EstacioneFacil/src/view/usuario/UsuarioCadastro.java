@@ -2,10 +2,10 @@ package view.usuario;
 
 import dao.UsuarioDao;
 import model.Usuario;
-import util.MD5Encryption;
+import model.util.MD5Encryption;
 import model.vo.SelectItemVO;
-import util.ExceptionUtils;
-import util.MensageiroUtils;
+import model.util.ExceptionUtils;
+import model.util.MensageiroUtils;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.JDialogCadastro;

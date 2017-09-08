@@ -13,7 +13,7 @@ import model.TipoVeiculo;
 import model.vo.TipoVeiculoFiltroVO;
 
 import org.apache.log4j.Logger;
-import util.ExceptionUtils;
+import model.util.ExceptionUtils;
 import view.area.AreaTableCellRender;
 import view.classes.JDialogLista;
 

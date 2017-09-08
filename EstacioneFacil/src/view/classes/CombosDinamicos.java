@@ -4,12 +4,14 @@ import dao.AreaDao;
 import dao.GrupoPermissaoDao;
 import dao.TipoVeiculoDao;
 import dao.UsuarioDao;
+import dao.VagaDao;
 import java.util.ArrayList;
 import java.util.List;
 import model.Area;
 import model.GrupoPermissao;
 import model.TipoVeiculo;
 import model.Usuario;
+import model.Vaga;
 import model.vo.SelectItemVO;
 
 
@@ -70,5 +72,24 @@ public class CombosDinamicos {
             tiposVeiculoCombo.add(new SelectItemVO(tipoVeiculo.getId(), tipoVeiculo.getDescricao()));
         }
         return tiposVeiculoCombo;
+    }
+    
+    public static List<SelectItemVO> getVagas(boolean cadastro, Long idArea) {
+        List<Vaga> vagas = new VagaDao().buscarPorArea(idArea);
+        List<SelectItemVO> vagasCombo = new ArrayList<>();
+        
+        if (cadastro && idArea != null) {
+            vagasCombo.add(new SelectItemVO(null, "Selecione"));
+        } else if (cadastro && idArea == null) {
+            vagasCombo.add(new SelectItemVO(null, "Selecione primeiro uma área"));
+        } else {
+            vagasCombo.add(new SelectItemVO(null, "Todos"));
+        }
+        if (!cadastro || (cadastro && idArea != null)) {
+            for (Vaga vaga : vagas) {
+                vagasCombo.add(new SelectItemVO(vaga.getId(), vaga.getCodigo()));
+            }
+        }       
+        return vagasCombo;
     }
 }

@@ -4,7 +4,7 @@ import controller.PermissaoBotaoController;
 import java.util.List;
 import model.Permissao;
 import model.PermissaoBotao;
-import util.ExceptionUtils;
+import model.util.ExceptionUtils;
 import view.classes.JDialogCadastro;
 
 

@@ -3,7 +3,7 @@ package view.auditoria;
 import java.util.Date;
 import java.util.List;
 import model.Auditoria;
-import util.FormatacaoUtils;
+import model.util.FormatacaoUtils;
 import view.classes.TableModel;
 
 /**

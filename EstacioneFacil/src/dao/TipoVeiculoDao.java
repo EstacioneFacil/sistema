@@ -27,7 +27,6 @@ public class TipoVeiculoDao extends GenericDao<TipoVeiculo> {
         }
     }
     
-    
     public TipoVeiculo buscarDescricao(String descricao) {
         Criteria crit = getSession().createCriteria(TipoVeiculo.class);
         crit.add(Restrictions.like("descricao", descricao));

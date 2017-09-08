@@ -10,7 +10,7 @@ import model.Vaga;
 import model.vo.SelectItemVO;
 import model.vo.VagaFiltroVO;
 import org.apache.log4j.Logger;
-import util.ExceptionUtils;
+import model.util.ExceptionUtils;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.JDialogLista;

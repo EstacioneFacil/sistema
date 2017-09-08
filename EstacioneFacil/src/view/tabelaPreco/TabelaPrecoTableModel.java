@@ -3,7 +3,8 @@ package view.tabelaPreco;
 import java.util.Date;
 import java.util.List;
 import model.TabelaPreco;
-import util.FormatacaoUtils;
+import model.constant.TipoPrecoEnum;
+import model.util.FormatacaoUtils;
 import view.classes.TableModel;
 
 /**
@@ -54,7 +55,7 @@ public class TabelaPrecoTableModel extends TableModel {
             case 3:
                 return dados.get(rowIndex).getVaga().getCodigo();
             case 4:
-                return dados.get(rowIndex).getTipo();
+                return TipoPrecoEnum.getByKey(dados.get(rowIndex).getTipo().trim()).getLabel();
             case 5:
                 return FormatacaoUtils.formatarStringValor(dados.get(rowIndex).getValor());
             case 6:

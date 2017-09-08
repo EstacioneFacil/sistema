@@ -1,7 +1,7 @@
 package view.classes;
 
 import config.ConfiguracaoSistema;
-import util.MensageiroUtils;
+import model.util.MensageiroUtils;
 
 /**
  *
