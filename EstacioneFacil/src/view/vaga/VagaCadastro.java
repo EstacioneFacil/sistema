@@ -169,7 +169,7 @@ public class VagaCadastro extends JDialogCadastro {
     
     public void carregarParaEdicao() {
         txtCodigo.setText(vaga.getCodigo());
-        txtDescricao.setText("");        
+        txtDescricao.setText(vaga.getDescricao());
         ((ComboModel) comboArea.getModel()).setSelectedItem(new SelectItemVO(vaga.getArea().getId(), vaga.getArea().getDescricao()));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedItem(new SelectItemVO(vaga.getTipoVeiculo().getId(), vaga.getTipoVeiculo().getDescricao()));
     }
