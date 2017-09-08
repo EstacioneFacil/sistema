@@ -238,12 +238,16 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
     
     public void carregarParaEdicao() {
         txtDataInicio.setText(FormatacaoUtils.getDataString(tabelaPreco.getDataInicio()));
-        txtDataFim.setText(FormatacaoUtils.getDataString(tabelaPreco.getDataFim()));
+        if( tabelaPreco.getDataFim() != null )
+        {
+            txtDataFim.setText(FormatacaoUtils.getDataString(tabelaPreco.getDataFim()));
+        }        
         txtValor.setText(tabelaPreco.getValor().toString());
              
         ((ComboModel) comboArea.getModel()).setSelectedItem(new SelectItemVO(tabelaPreco.getArea().getId(), tabelaPreco.getArea().getDescricao()));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedItem(new SelectItemVO(tabelaPreco.getTipoVeiculo().getId(), tabelaPreco.getTipoVeiculo().getDescricao()));
-        ((DefaultComboBoxModel) comboTipo.getModel()).setSelectedItem(TipoPrecoEnum.getByKey(tabelaPreco.getTipo()).getLabel());
+        
+        ((DefaultComboBoxModel) comboTipo.getModel()).setSelectedItem(TipoPrecoEnum.getByKey(tabelaPreco.getTipo().trim()).getLabel());
         setarVagaCombo(tabelaPreco.getVaga());
     }
 
