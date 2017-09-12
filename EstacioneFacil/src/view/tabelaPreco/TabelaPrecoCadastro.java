@@ -1,6 +1,7 @@
 package view.tabelaPreco;
 
 import dao.TabelaPrecoDao;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import model.TabelaPreco;
 import model.Vaga;
@@ -11,6 +12,7 @@ import model.util.FormatacaoUtils;
 import model.util.ExceptionUtils;
 import model.util.MensageiroUtils;
 import model.util.ValidacaoUtils;
+import model.vo.TabelaPrecoFiltroVO;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.CombosEstaticos;
@@ -58,6 +60,7 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         txtValor = new javax.swing.JFormattedTextField();
         comboTipo = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -107,7 +110,7 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         comboVaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Vaga:*");
+        jLabel4.setText("Vaga:");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Data Fim:");
@@ -127,19 +130,25 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Tipo:*");
 
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("<html>Para definir um valor a área total, <u>NÃO</u> selecione a vaga!</html>");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 129, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 142, Short.MAX_VALUE)
                         .addComponent(btnGravar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCancelar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
@@ -167,6 +176,8 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -238,11 +249,10 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
     
     public void carregarParaEdicao() {
         txtDataInicio.setText(FormatacaoUtils.getDataString(tabelaPreco.getDataInicio()));
-        if( tabelaPreco.getDataFim() != null )
-        {
+        if(tabelaPreco.getDataFim() != null) {
             txtDataFim.setText(FormatacaoUtils.getDataString(tabelaPreco.getDataFim()));
         }        
-        txtValor.setText(tabelaPreco.getValor().toString());
+        txtValor.setText(FormatacaoUtils.formatarStringValor(tabelaPreco.getValor()));
              
         ((ComboModel) comboArea.getModel()).setSelectedItem(new SelectItemVO(tabelaPreco.getArea().getId(), tabelaPreco.getArea().getDescricao()));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedItem(new SelectItemVO(tabelaPreco.getTipoVeiculo().getId(), tabelaPreco.getTipoVeiculo().getDescricao()));
@@ -311,8 +321,7 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
             if (itemVaga.getId() != null) {
                 tabelaPreco.setIdVaga(itemVaga.getId());
             } else {
-                MensageiroUtils.mensagemAlerta(this, "Selecione uma vaga!");
-                return false;
+                tabelaPreco.setIdVaga(null);
             }
 
             String valor = FormatacaoUtils.removerFormatacaoValor(txtValor.getText());
@@ -348,21 +357,70 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
-//            Vaga vagaAux = vagaDao.buscarVaga(vaga);
-//            if (vagaAux != null) {
-//                MensageiroUtils.mensagemAlerta(this, "Já existe uma vaga com este código!");
-//            } else {
-                tabelaPrecoDao.gravar(tabelaPreco);
-                mostrarMensagemSucesso();
-
-                if (getCadastroAnterior() instanceof TabelaPrecoLista) {
-                    ((TabelaPrecoLista) getCadastroAnterior()).pesquisar();
+            TabelaPreco tabelaPrecoAux = tabelaPrecoDao.buscarTabelaPreco(tabelaPreco);
+            if (tabelaPrecoAux != null) {
+                if (tabelaPrecoAux.getIdVaga() != null) {
+                    MensageiroUtils.mensagemAlerta(this, "Já existe um valor vinculado a essa vaga!");
+                } else {
+                    MensageiroUtils.mensagemAlerta(this, "Já existe um valor vinculado a essa área!");
                 }
-                dispose();
-//            }
+            } else {
+                if (isDatasValidas()) {
+                    tabelaPrecoDao.gravar(tabelaPreco);
+                    mostrarMensagemSucesso();
+
+                    if (getCadastroAnterior() instanceof TabelaPrecoLista) {
+                        ((TabelaPrecoLista) getCadastroAnterior()).pesquisar();
+                    }
+                    dispose();
+                }
+            }
         } catch (Exception e) {
             ExceptionUtils.mostrarErro(this, e.getMessage());
         }
+    }
+    
+    public boolean isDatasValidas() throws Exception {
+        if ((tabelaPreco.getDataFim() != null) && (tabelaPreco.getDataFim().before(tabelaPreco.getDataInicio()))) {
+            MensageiroUtils.mensagemAlerta(this, "A data de fim não pode ser anterior a data de início!"); 
+            return false;			
+        }        
+        
+        TabelaPrecoFiltroVO filtroVO = new TabelaPrecoFiltroVO();
+        filtroVO.setId(tabelaPreco.getId());
+        filtroVO.setIdArea(tabelaPreco.getIdArea());
+        filtroVO.setIdTipoVeiculo(tabelaPreco.getIdTipoVeiculo());
+        filtroVO.setIdVaga(tabelaPreco.getIdVaga());
+        
+        List<TabelaPreco> tabelasPrecos = tabelaPrecoDao.buscarPorFiltros(filtroVO);
+        for (TabelaPreco tabelaPrecoAux : tabelasPrecos) {
+            if ((tabelaPreco.getDataFim() == null) && (tabelaPrecoAux.getDataFim() == null)) {
+                MensageiroUtils.mensagemAlerta(this, "Já existe uma tabela de preço nesse período!");
+                return false;
+            }
+            if (tabelaPreco.getDataFim() == null) {
+                if ((tabelaPreco.getDataInicio().before(tabelaPrecoAux.getDataFim())) || (tabelaPreco.getDataInicio().equals(tabelaPrecoAux.getDataFim()))) {
+                    MensageiroUtils.mensagemAlerta(this, "A data de início não pode ser menor ou igual a data de fim da última tabela de preço!"); 
+                    return false;
+                }
+            } else if (tabelaPrecoAux.getDataFim() == null) {
+                if ((tabelaPreco.getDataInicio().after(tabelaPrecoAux.getDataInicio())) || (tabelaPreco.getDataFim().equals(tabelaPrecoAux.getDataInicio())) || 
+                    (tabelaPreco.getDataInicio().equals(tabelaPrecoAux.getDataInicio())) || (tabelaPreco.getDataFim().after(tabelaPrecoAux.getDataInicio()))) {
+                        MensageiroUtils.mensagemAlerta(this, "Já existe uma tabela de preço nesse período!");
+                        return false;
+                }    	        		
+            } else {    		
+                if (((tabelaPreco.getDataInicio().after(tabelaPrecoAux.getDataInicio()) && tabelaPreco.getDataInicio().before(tabelaPrecoAux.getDataFim())) ||
+                    (tabelaPreco.getDataFim().after(tabelaPrecoAux.getDataInicio()) && tabelaPreco.getDataFim().before(tabelaPrecoAux.getDataFim()))) ||
+                    ((tabelaPreco.getDataInicio().equals(tabelaPrecoAux.getDataInicio())) || (tabelaPreco.getDataInicio().equals(tabelaPrecoAux.getDataFim())) ||
+                    (tabelaPreco.getDataFim().equals(tabelaPrecoAux.getDataInicio())) || (tabelaPreco.getDataFim().equals(tabelaPrecoAux.getDataFim()))) ||
+                    ((tabelaPreco.getDataInicio().before(tabelaPrecoAux.getDataInicio())) && (tabelaPreco.getDataFim().after(tabelaPrecoAux.getDataFim())))) {
+                        MensageiroUtils.mensagemAlerta(this, "Já existe uma tabela de preço nesse período!");
+                        return false;
+                }    		
+            } 
+        }
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -379,6 +437,7 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JFormattedTextField txtDataFim;
     private javax.swing.JFormattedTextField txtDataInicio;
     private javax.swing.JFormattedTextField txtValor;

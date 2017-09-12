@@ -3,6 +3,7 @@ package view.tabelaPreco;
 import java.util.Date;
 import java.util.List;
 import model.TabelaPreco;
+import model.Vaga;
 import model.constant.TipoPrecoEnum;
 import model.util.FormatacaoUtils;
 import view.classes.TableModel;
@@ -53,7 +54,8 @@ public class TabelaPrecoTableModel extends TableModel {
             case 2:
                 return dados.get(rowIndex).getArea().getDescricao();
             case 3:
-                return dados.get(rowIndex).getVaga().getCodigo();
+                Vaga vaga = dados.get(rowIndex).getVaga();
+                return vaga != null ? vaga.getCodigo() : null;
             case 4:
                 return TipoPrecoEnum.getByKey(dados.get(rowIndex).getTipo().trim()).getLabel();
             case 5:

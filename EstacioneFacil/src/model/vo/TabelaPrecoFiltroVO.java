@@ -1,5 +1,7 @@
 package model.vo;
 
+import java.util.Date;
+
 /**
  *
  * @author Douglas
@@ -9,6 +11,8 @@ public class TabelaPrecoFiltroVO extends FiltroVO {
     private Long idTipoVeiculo;
     private Long idArea;
     private Long idVaga;
+    private Date dataInicio;
+    private Date dataFim;
 
     
     public Long getIdTipoVeiculo() {
@@ -33,5 +37,21 @@ public class TabelaPrecoFiltroVO extends FiltroVO {
 
     public void setIdVaga(Long idVaga) {
         this.idVaga = idVaga;
+    }
+
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public Date getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
     }
 }

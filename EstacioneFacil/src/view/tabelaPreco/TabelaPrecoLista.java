@@ -36,7 +36,6 @@ public class TabelaPrecoLista extends JDialogLista {
         tabelaPrecoFiltroVO = new TabelaPrecoFiltroVO();
         
         carregarCombos();
-                
         carregarLista();
     }
 
@@ -46,6 +45,9 @@ public class TabelaPrecoLista extends JDialogLista {
         
         comboTipoVeiculo.setModel(new ComboModel(CombosDinamicos.getTiposVeiculo(false)));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedIndex(0);
+        
+        comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(false, null)));
+        ((ComboModel) comboVaga.getModel()).setSelectedIndex(0);
     }
     
     public void carregarLista() {
@@ -65,17 +67,20 @@ public class TabelaPrecoLista extends JDialogLista {
     
     public void pesquisar() {
         tabelaPrecoFiltroVO.setPesquisa(txtPesquisar.getText());
-        
+                
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();
         if (itemArea != null) {
             tabelaPrecoFiltroVO.setIdArea(itemArea.getId());
+            ((ComboModel) comboVaga.getModel()).setLista(CombosDinamicos.getVagas(false, itemArea.getId()));
         }
-        
         SelectItemVO itemTipoVeiculo = ((ComboModel) comboTipoVeiculo.getModel()).getSelectedItem();
         if (itemTipoVeiculo != null) {
             tabelaPrecoFiltroVO.setIdTipoVeiculo(itemTipoVeiculo.getId());
         }
-
+        SelectItemVO itemVaga = ((ComboModel) comboVaga.getModel()).getSelectedItem();
+        if (itemVaga != null) {
+            tabelaPrecoFiltroVO.setIdVaga(itemVaga.getId());
+        }
         carregarLista();
     }
     
@@ -122,6 +127,8 @@ public class TabelaPrecoLista extends JDialogLista {
         comboArea = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         comboTipoVeiculo = new javax.swing.JComboBox<>();
+        comboVaga = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
         btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -206,6 +213,17 @@ public class TabelaPrecoLista extends JDialogLista {
             }
         });
 
+        comboVaga.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboVaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador" }));
+        comboVaga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboVagaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Vaga:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -214,11 +232,13 @@ public class TabelaPrecoLista extends JDialogLista {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(comboArea, 0, 200, Short.MAX_VALUE)
-                    .addComponent(comboTipoVeiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(comboTipoVeiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comboVaga, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -232,6 +252,10 @@ public class TabelaPrecoLista extends JDialogLista {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(comboTipoVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboVaga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addContainerGap())
         );
 
@@ -280,7 +304,7 @@ public class TabelaPrecoLista extends JDialogLista {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -344,6 +368,10 @@ public class TabelaPrecoLista extends JDialogLista {
         pesquisar();
     }//GEN-LAST:event_comboTipoVeiculoActionPerformed
 
+    private void comboVagaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVagaActionPerformed
+        pesquisar();
+    }//GEN-LAST:event_comboVagaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
@@ -351,9 +379,11 @@ public class TabelaPrecoLista extends JDialogLista {
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JComboBox<String> comboArea;
     private javax.swing.JComboBox<String> comboTipoVeiculo;
+    private javax.swing.JComboBox<String> comboVaga;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
