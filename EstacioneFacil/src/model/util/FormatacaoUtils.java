@@ -29,6 +29,11 @@ public class FormatacaoUtils {
         return formatter.format(data);
     }
     
+    public static String getHoraString(Date data) {
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(data);
+    }
+    
     public static String getDataSQL(Date data) throws Exception {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return formatter.format(data);
@@ -48,6 +53,32 @@ public class FormatacaoUtils {
             MaskFormatter m = new MaskFormatter();
             m.setPlaceholderCharacter(' ');
             m.setMask("##/##/####");
+            campo.setFormatterFactory(null);
+            campo.setFormatterFactory(new DefaultFormatterFactory(m));
+            campo.setValue(null);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+    
+    public static void reformatarHora(JFormattedTextField campo) {
+        try {
+            MaskFormatter m = new MaskFormatter();
+            m.setPlaceholderCharacter(' ');
+            m.setMask("##:##");
+            campo.setFormatterFactory(null);
+            campo.setFormatterFactory(new DefaultFormatterFactory(m));
+            campo.setValue(null);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+    
+    public static void reformatarPlaca(JFormattedTextField campo) {
+        try {
+            MaskFormatter m = new MaskFormatter();
+            m.setPlaceholderCharacter(' ');
+            m.setMask("UUU-####");
             campo.setFormatterFactory(null);
             campo.setFormatterFactory(new DefaultFormatterFactory(m));
             campo.setValue(null);
