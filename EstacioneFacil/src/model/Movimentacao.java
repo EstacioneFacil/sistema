@@ -66,7 +66,15 @@ public class Movimentacao implements Serializable {
     @JoinColumn(name = "tabela_preco_id", insertable = false, updatable = false)
     private TabelaPreco tabelaPreco;
 
+    public Movimentacao() {
+        
+    }
     
+    public Movimentacao(Vaga vaga) {
+        this.vaga = vaga;
+        this.idVaga = vaga.getId();
+    }
+
     
     public Long getId() {
         return id;

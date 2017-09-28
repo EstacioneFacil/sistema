@@ -25,8 +25,8 @@ public class ConfiguracaoSistema {
     public static final String MSG_REGISTRO_EXCLUIR_SUCESSO = "Registro excluído com sucesso!";
     
     private static String login;
+    private static Long idArea;
     private static Usuario usuarioLogado;
-
 
 
     public static String getLogin() {
@@ -43,5 +43,13 @@ public class ConfiguracaoSistema {
 
     public static void setUsuarioLogado(Usuario usuarioLogado) {
         ConfiguracaoSistema.usuarioLogado = usuarioLogado;
+    }
+
+    public static Long getIdArea() {
+        return idArea;
+    }
+
+    public static void setIdArea(Long idArea) {
+        ConfiguracaoSistema.idArea = idArea;
     }
 }

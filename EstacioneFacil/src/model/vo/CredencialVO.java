@@ -12,6 +12,7 @@ public class CredencialVO {
     private String senha;
     private boolean senhaCorreta;
     private Usuario usuario;
+    private Long idArea;
 
     public String getSenha() {
         return senha;
@@ -43,5 +44,13 @@ public class CredencialVO {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public Long getIdArea() {
+        return idArea;
+    }
+
+    public void setIdArea(Long idArea) {
+        this.idArea = idArea;
     }
 }

@@ -16,6 +16,7 @@ public class PrincipalMain {
         Login login = new Login();
         CredencialVO credencialVO = login.openLogin();
         ConfiguracaoSistema.setUsuarioLogado(credencialVO.getUsuario());
+        ConfiguracaoSistema.setIdArea(credencialVO.getIdArea());
         
         if (ConfiguracaoSistema.getUsuarioLogado() == null) {
             System.exit(0);
