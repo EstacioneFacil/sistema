@@ -3,10 +3,13 @@ package view;
 import config.ConfiguracaoSistema;
 import controller.menu.MenuController;
 import dao.AreaDao;
+import dao.MovimentacaoDao;
 import dao.VagaDao;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,8 +27,12 @@ import view.movimentacao.MovimentacaoEntradaCadastro;
  */
 public class Principal extends javax.swing.JFrame {
     
+    private MovimentacaoDao movimentacaoDao;
+    
     public Principal() {
         initComponents();
+        
+        this.movimentacaoDao = new MovimentacaoDao();
         
         setIconImage(new ImageIcon(getClass().getResource(ConfiguracaoSistema.ICONE)).getImage());
         setTitle(ConfiguracaoSistema.NOME);
@@ -35,7 +42,7 @@ public class Principal extends javax.swing.JFrame {
         atualizarVagas(ConfiguracaoSistema.getIdArea());
     }
               
-    private void atualizarVagas(Long idArea) {        
+    public void atualizarVagas(Long idArea) {        
         if (idArea != null) {
             Area area = new AreaDao().findById(idArea);
             if (area != null) {
@@ -62,15 +69,35 @@ public class Principal extends javax.swing.JFrame {
         for (Vaga vaga : vagas) {
             JButton jButton = new JButton();
             jButton.setPreferredSize(dimension);
-            jButton.setText(vaga.getCodigo() + " - " + vaga.getTipoVeiculo().getDescricao());
-            jButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    new MovimentacaoEntradaCadastro(this, new Movimentacao(vaga)).setVisible(true);
-                }
-            });
+            verificarVagas(jButton, vaga);
             jPanel.add(jButton, "align center top");
         }   
         jPanel.revalidate();
+    }
+    
+    private void verificarVagas(JButton jButton, Vaga vaga) {
+        //cor
+        jButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        jButton.setForeground(Color.BLACK);
+        jButton.setContentAreaFilled(false);
+        jButton.setOpaque(true);
+        
+        Movimentacao movimentacao = movimentacaoDao.buscarVagaAberta(vaga);
+        if (movimentacao != null) {
+            jButton.setBackground(new Color(255, 53, 53));
+            jButton.setText(movimentacao.getPlaca());
+        } else {
+            jButton.setBackground(new Color(80, 255, 61));
+            jButton.setText(vaga.getCodigo() + " - " + vaga.getTipoVeiculo().getDescricao());
+        }
+
+        //acao
+        Object principal = this;
+        jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                new MovimentacaoEntradaCadastro(principal, movimentacao != null ? movimentacao : new Movimentacao(vaga)).setVisible(true);
+            }
+        });
     }
     
     private void montarMensagemAlerta(String msg) {

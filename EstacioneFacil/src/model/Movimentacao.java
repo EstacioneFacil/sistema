@@ -73,6 +73,7 @@ public class Movimentacao implements Serializable {
     public Movimentacao(Vaga vaga) {
         this.vaga = vaga;
         this.idVaga = vaga.getId();
+        this.dataHoraEntrada = new Date();
     }
 
     

@@ -1,9 +1,12 @@
 package view.movimentacao;
 
-import java.util.Date;
+import config.ConfiguracaoSistema;
+import dao.MovimentacaoDao;
 import model.Movimentacao;
 import model.util.ExceptionUtils;
 import model.util.FormatacaoUtils;
+import model.util.MensageiroUtils;
+import view.Principal;
 import view.classes.ExibeQuadro;
 import view.classes.JDialogCadastro;
 import view.classes.VideoCaptura;
@@ -15,6 +18,7 @@ import view.classes.VideoCaptura;
 public class MovimentacaoEntradaCadastro extends JDialogCadastro {
 
     private Movimentacao movimentacao;
+    private MovimentacaoDao movimentacaoDao;
     private VideoCaptura webCam;
     private ExibeQuadro exibeQuadro;
     private Thread executor;
@@ -24,6 +28,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         initComponents();
 
         this.movimentacao = movimentacao;
+        this.movimentacaoDao = new MovimentacaoDao();
         
         setCadastroAnterior(cadastroAnterior);
         
@@ -44,11 +49,17 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         btnGravar = new javax.swing.JButton();
         txtPlaca = new javax.swing.JFormattedTextField();
         lblWebcam = new javax.swing.JLabel();
+        txtArea = new javax.swing.JTextField();
+        txtTipoVeiculo = new javax.swing.JTextField();
+        txtVaga = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Data entrada:*");
+        jLabel1.setText("Data de entrada:*");
 
         txtDataEntrada.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDataEntrada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -57,7 +68,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         txtHoraEntrada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Hora entrada:*");
+        jLabel2.setText("Hora de entrada:*");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Placa:*");
@@ -83,29 +94,58 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         txtPlaca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPlaca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        txtTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        txtVaga.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtVaga.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Área:*");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Vaga:*");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setText("Tipo de veículo:*");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(btnGravar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGravar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelar))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtHoraEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCancelar)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDataEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(40, 40, 40)
-                .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtHoraEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtDataEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                        .addComponent(txtVaga, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(txtTipoVeiculo))))
+                        .addGap(40, 40, 40)
+                        .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -114,6 +154,18 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTipoVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtVaga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtDataEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -125,12 +177,12 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                    .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31))
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -159,11 +211,18 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         FormatacaoUtils.reformatarHora(txtHoraEntrada);
         FormatacaoUtils.reformatarPlaca(txtPlaca);
         
+        txtArea.setEnabled(false);
+        txtTipoVeiculo.setEnabled(false);
+        txtVaga.setEnabled(false);
         txtDataEntrada.setEnabled(false);
         txtHoraEntrada.setEnabled(false);
         
-        txtDataEntrada.setText(FormatacaoUtils.getDataString(new Date()));
-        txtHoraEntrada.setText(FormatacaoUtils.getHoraString(new Date()));
+        txtDataEntrada.setText(FormatacaoUtils.getDataString(movimentacao.getDataHoraEntrada()));
+        txtHoraEntrada.setText(FormatacaoUtils.getHoraString(movimentacao.getDataHoraEntrada()));
+        
+        txtArea.setText(movimentacao.getVaga().getArea().getDescricao());
+        txtTipoVeiculo.setText(movimentacao.getVaga().getTipoVeiculo().getDescricao());
+        txtVaga.setText(movimentacao.getVaga().getCodigo());
         
         if (movimentacao.getId() != null) {
             carregarParaEdicao();
@@ -175,7 +234,13 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     }
 
     public boolean verificaCamposObrigatorios() {
-        
+        if (txtPlaca.getText().trim().equals("")) {
+            MensageiroUtils.mensagemAlerta(this, "Preencha a placa do veículo!");
+            return false;
+        } else {
+            movimentacao.setPlaca(FormatacaoUtils.removerFormatacao(txtPlaca.getText()));
+        }
+        movimentacao.setIdUsuario(ConfiguracaoSistema.getUsuarioLogado().getId());
         return true;
     }
 
@@ -185,6 +250,14 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
+            movimentacaoDao.gravar(movimentacao);
+            MensageiroUtils.mensagemSucesso(this, "Movimentação registrada com sucesso!");
+            
+            if (getCadastroAnterior() instanceof Principal) {
+                ((Principal) getCadastroAnterior()).atualizarVagas(movimentacao.getVaga().getIdArea());
+            }
+            dispose();
+            
 //            Area areaAux = areaDao.buscarDescricao(area.getDescricao());
 //            if (areaAux != null) {
 //                MensageiroUtils.mensagemAlerta(this, "Já existe uma area cadastrada com esta descrição!");
@@ -208,10 +281,16 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblWebcam;
+    private javax.swing.JTextField txtArea;
     private javax.swing.JFormattedTextField txtDataEntrada;
     private javax.swing.JFormattedTextField txtHoraEntrada;
     private javax.swing.JFormattedTextField txtPlaca;
+    private javax.swing.JTextField txtTipoVeiculo;
+    private javax.swing.JTextField txtVaga;
     // End of variables declaration//GEN-END:variables
 
 }

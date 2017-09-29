@@ -22,7 +22,7 @@ public class ExibeQuadro implements Runnable {
     @Override
     public void run() {
         while(webCam.video.isOpened()){
-            Icon icon = new ImageIcon(new ImageIcon(webCam.capturaQuadroBufferedImage()).getImage().getScaledInstance(340, 340, Image.SCALE_SMOOTH));
+            Icon icon = new ImageIcon(new ImageIcon(webCam.capturaQuadroBufferedImage()).getImage().getScaledInstance(340, 300, Image.SCALE_SMOOTH));
             
             this.jlbQuadro.setIcon(icon);
             this.jlbQuadro.repaint();
