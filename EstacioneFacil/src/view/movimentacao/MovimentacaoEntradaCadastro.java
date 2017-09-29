@@ -197,22 +197,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
-        executor.suspend();
-        
-        //captar imagem
-        try {
-            // Cria pastas automaticamente
-//            FileUtils.criarPastas(ConfiguracaoSistema.CAMINHO_ANEXOS);
-//            
-//            File outputfile = new File(ConfiguracaoSistema.CAMINHO_ANEXOS + "\\image.jpg");
-//            ImageIO.write(webCam.capturaQuadroBufferedImage(), "jpg", outputfile);
-
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-                
-        gravar();
+         gravar();
     }//GEN-LAST:event_btnGravarActionPerformed
 
     public void carregarCadastro() {   
@@ -251,11 +236,12 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     }
 
     public boolean verificaCamposObrigatorios() {
-        if (txtPlaca.getText().trim().equals("")) {
+        String placa = FormatacaoUtils.removerFormatacao(txtPlaca.getText());
+        if (placa.trim().equals("")) {
             MensageiroUtils.mensagemAlerta(this, "Preencha a placa do veículo!");
             return false;
         } else {
-            movimentacao.setPlaca(FormatacaoUtils.removerFormatacao(txtPlaca.getText()));
+            movimentacao.setPlaca(placa);
         }
         movimentacao.setIdUsuario(ConfiguracaoSistema.getUsuarioLogado().getId());
         return true;
@@ -267,6 +253,28 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
+            
+            
+            
+            
+            executor.suspend();
+        
+            //captar imagem
+            try {
+                // Cria pastas automaticamente
+    //            FileUtils.criarPastas(ConfiguracaoSistema.CAMINHO_ANEXOS);
+    //            
+    //            File outputfile = new File(ConfiguracaoSistema.CAMINHO_ANEXOS + "\\image.jpg");
+    //            ImageIO.write(webCam.capturaQuadroBufferedImage(), "jpg", outputfile);
+
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+              
+            
+            
+            
             movimentacaoDao.gravar(movimentacao);
             MensageiroUtils.mensagemSucesso(this, "Movimentação registrada com sucesso!");
             
