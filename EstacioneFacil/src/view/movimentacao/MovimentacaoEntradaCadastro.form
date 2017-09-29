@@ -53,10 +53,8 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="txtDataEntrada" pref="100" max="32767" attributes="0"/>
-                                      <Component id="txtVaga" alignment="1" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="txtDataEntrada" pref="150" max="32767" attributes="0"/>
+                                  <Component id="txtVaga" alignment="1" max="32767" attributes="0"/>
                                   <Component id="txtArea" pref="150" max="32767" attributes="0"/>
                                   <Component id="txtTipoVeiculo" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -181,7 +179,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/view/imagens/check.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Gravar"/>
+        <Property name="text" type="java.lang.String" value="Registrar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGravarActionPerformed"/>

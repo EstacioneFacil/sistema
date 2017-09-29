@@ -18,6 +18,7 @@ import static javax.swing.border.TitledBorder.DEFAULT_POSITION;
 import model.Area;
 import model.Movimentacao;
 import model.Vaga;
+import model.util.FormatacaoUtils;
 import net.miginfocom.swing.MigLayout;
 import view.movimentacao.MovimentacaoEntradaCadastro;
 
@@ -85,10 +86,12 @@ public class Principal extends javax.swing.JFrame {
         Movimentacao movimentacao = movimentacaoDao.buscarVagaAberta(vaga);
         if (movimentacao != null) {
             jButton.setBackground(new Color(255, 53, 53));
-            jButton.setText(movimentacao.getPlaca());
+            
+            String texto = "<html><center><font style='font-size:12px'>"+FormatacaoUtils.formatarPlaca(movimentacao.getPlaca())+"</font><br><font style='font-size:10px'>"+FormatacaoUtils.getDataHoraString(movimentacao.getDataHoraEntrada())+"</font></center></html>";
+            jButton.setText(texto);
         } else {
             jButton.setBackground(new Color(80, 255, 61));
-            jButton.setText(vaga.getCodigo() + " - " + vaga.getTipoVeiculo().getDescricao());
+            jButton.setText("<html><center><font style='font-size:12px'>"+vaga.getCodigo() + " - " + vaga.getTipoVeiculo().getDescricao()+"</font></center></html>");
         }
 
         //acao

@@ -78,13 +78,25 @@ public class FormatacaoUtils {
         try {
             MaskFormatter m = new MaskFormatter();
             m.setPlaceholderCharacter(' ');
-            m.setMask("UUU-####");
+            m.setMask(getMaskPlaca());
             campo.setFormatterFactory(null);
             campo.setFormatterFactory(new DefaultFormatterFactory(m));
             campo.setValue(null);
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
+    
+    public static String formatarPlaca(Object value) {
+        MaskFormatter m;
+        try {
+            m = new MaskFormatter(getMaskPlaca());
+            m.setValueContainsLiteralCharacters(false); 
+            return m.valueToString(value);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return value.toString();
     }
     
     public static String removerFormatacao(String dado) {
@@ -115,5 +127,9 @@ public class FormatacaoUtils {
     
     public static String formatarStringValor(Double dado) {
         return df.format(dado);
+    }
+    
+    public static String getMaskPlaca() {
+        return "UUU-####";
     }
 }

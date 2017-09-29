@@ -25,11 +25,11 @@ public class Movimentacao implements Serializable {
     private Long id;
     
     @Column(name = "data_hora_entrada")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataHoraEntrada;
     
     @Column(name = "data_hora_saida")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataHoraSaida;
     
     @Column(name = "placa")

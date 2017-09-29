@@ -2,8 +2,11 @@ package view.movimentacao;
 
 import config.ConfiguracaoSistema;
 import dao.MovimentacaoDao;
+import java.io.File;
+import javax.imageio.ImageIO;
 import model.Movimentacao;
 import model.util.ExceptionUtils;
+import model.util.FileUtils;
 import model.util.FormatacaoUtils;
 import model.util.MensageiroUtils;
 import view.Principal;
@@ -84,7 +87,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
 
         btnGravar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGravar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/check.png"))); // NOI18N
-        btnGravar.setText("Gravar");
+        btnGravar.setText("Registrar");
         btnGravar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGravarActionPerformed(evt);
@@ -139,9 +142,8 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
                                     .addComponent(jLabel6))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtDataEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                        .addComponent(txtVaga, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(txtDataEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(txtVaga, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                                     .addComponent(txtTipoVeiculo))))
                         .addGap(40, 40, 40)
@@ -196,7 +198,20 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
         executor.suspend();
+        
         //captar imagem
+        try {
+            // Cria pastas automaticamente
+//            FileUtils.criarPastas(ConfiguracaoSistema.CAMINHO_ANEXOS);
+//            
+//            File outputfile = new File(ConfiguracaoSistema.CAMINHO_ANEXOS + "\\image.jpg");
+//            ImageIO.write(webCam.capturaQuadroBufferedImage(), "jpg", outputfile);
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+                
         gravar();
     }//GEN-LAST:event_btnGravarActionPerformed
 
@@ -230,7 +245,9 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     }
     
     public void carregarParaEdicao() {
+        txtPlaca.setEnabled(false);
         
+        txtPlaca.setText(movimentacao.getPlaca());
     }
 
     public boolean verificaCamposObrigatorios() {
