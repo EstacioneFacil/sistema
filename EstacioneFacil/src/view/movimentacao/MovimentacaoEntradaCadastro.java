@@ -1,14 +1,19 @@
 package view.movimentacao;
 
 import config.ConfiguracaoSistema;
+import controller.AnexoController;
 import dao.MovimentacaoDao;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import model.Anexo;
 import model.Movimentacao;
 import model.util.ExceptionUtils;
-import model.util.FileUtils;
 import model.util.FormatacaoUtils;
 import model.util.MensageiroUtils;
+import org.apache.log4j.Logger;
 import view.Principal;
 import view.classes.ExibeQuadro;
 import view.classes.JDialogCadastro;
@@ -19,9 +24,12 @@ import view.classes.VideoCaptura;
  * @author Jonas
  */
 public class MovimentacaoEntradaCadastro extends JDialogCadastro {
+    
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private Movimentacao movimentacao;
     private MovimentacaoDao movimentacaoDao;
+    private AnexoController anexoController;
     private VideoCaptura webCam;
     private ExibeQuadro exibeQuadro;
     private Thread executor;
@@ -32,6 +40,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
 
         this.movimentacao = movimentacao;
         this.movimentacaoDao = new MovimentacaoDao();
+        this.anexoController = new AnexoController();
         
         setCadastroAnterior(cadastroAnterior);
         
@@ -192,7 +201,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        executor.suspend();
+        desligarCamera();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -233,6 +242,18 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         txtPlaca.setEnabled(false);
         
         txtPlaca.setText(movimentacao.getPlaca());
+        
+        if (movimentacao.getAnexo() != null) {
+            try {
+                File anexo = new File(movimentacao.getAnexo().getCaminhoCompleto());
+                BufferedImage img = ImageIO.read(anexo);
+                Icon icon = new ImageIcon(img);
+                this.lblWebcam.setIcon(icon);
+                this.lblWebcam.repaint();
+            } catch(Exception e) {
+                logger.error("Erro ao exibir imagem do veículo", e);
+            }
+        }
     }
 
     public boolean verificaCamposObrigatorios() {
@@ -247,57 +268,41 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
         return true;
     }
 
-
     public void gravar() {
         try {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
+            desligarCamera();
             
-            
-            
-            
-            executor.suspend();
-        
-            //captar imagem
-            try {
-                // Cria pastas automaticamente
-    //            FileUtils.criarPastas(ConfiguracaoSistema.CAMINHO_ANEXOS);
-    //            
-    //            File outputfile = new File(ConfiguracaoSistema.CAMINHO_ANEXOS + "\\image.jpg");
-    //            ImageIO.write(webCam.capturaQuadroBufferedImage(), "jpg", outputfile);
-
-
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-              
-            
-            
-            
+            movimentacao.setIdAnexo(gravarImagem());            
             movimentacaoDao.gravar(movimentacao);
+            
             MensageiroUtils.mensagemSucesso(this, "Movimentação registrada com sucesso!");
             
             if (getCadastroAnterior() instanceof Principal) {
                 ((Principal) getCadastroAnterior()).atualizarVagas(movimentacao.getVaga().getIdArea());
             }
             dispose();
-            
-//            Area areaAux = areaDao.buscarDescricao(area.getDescricao());
-//            if (areaAux != null) {
-//                MensageiroUtils.mensagemAlerta(this, "Já existe uma area cadastrada com esta descrição!");
-//            } else {
-//                areaDao.gravar(area);
-//                mostrarMensagemSucesso();
-//
-//                if (getCadastroAnterior() instanceof AreaLista) {
-//                    ((AreaLista) getCadastroAnterior()).pesquisar();
-//                }
-//                dispose();
-//            }
         } catch (Exception e) {
             ExceptionUtils.mostrarErro(this, e.getMessage());
         }
+    }
+    
+    private void desligarCamera() {
+        executor.suspend();
+    }
+    
+    private Long gravarImagem() {
+        try {
+            Anexo anexo = anexoController.salvarAnexo(webCam.capturaQuadroBufferedImage(), null);
+            if (anexo != null) {
+                return anexo.getId();
+            }
+        } catch(Exception e) {
+            logger.error("Erro ao gerar imagem da camera", e);
+        }
+        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

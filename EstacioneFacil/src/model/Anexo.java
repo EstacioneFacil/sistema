@@ -1,5 +1,7 @@
 package model;
 
+import config.ConfiguracaoSistema;
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -32,7 +34,10 @@ public class Anexo implements Serializable {
     private String observacao;
 
     
-    
+    public String getCaminhoCompleto() {
+        return ConfiguracaoSistema.CAMINHO_ANEXOS + File.separator + nome + ".jpg";
+    }
+        
     public Long getId() {
         return id;
     }
