@@ -1,5 +1,6 @@
 package dao;
 
+import config.ConfiguracaoSistema;
 import java.util.List;
 import model.Menu;
 import model.PermissaoBotao;
@@ -37,7 +38,9 @@ public class PermissaoBotaoDao extends GenericDao<PermissaoBotao> {
                 + "inner join menu_botao mb on pb.menu_botao_id = mb.id "
                 + "inner join botao b on mb.botao_id = b.id "
                 + "inner join menu m on mb.menu_id = m.id "
-                + "where m.classe = '"+tela+"'");
+                + "inner join permissao p on pb.permissao_id = p.id "
+                + "inner join grupo_permissao gp on p.grupo_permissao_id = gp.id "
+                + "where m.classe = '"+tela+"' and gp.id = "+ConfiguracaoSistema.getUsuarioLogado().getGrupoPermissao().getId());
         
         sqlQuery.addScalar("nome", StringType.INSTANCE);
         sqlQuery.addScalar("permissao", BooleanType.INSTANCE);

@@ -22,7 +22,9 @@ public class MenuController {
         for (Menu menu : menus) {
             JMenu jMenu = new JMenu(menu.getDescricao());
             montarSubMenus(menu, jMenu);
-            barraMenu.add(jMenu);
+            if (!menu.getSubMenus().isEmpty()) {
+                barraMenu.add(jMenu);
+            }
         }
         return barraMenu;
     }

@@ -1,10 +1,11 @@
 package view.usuario;
 
+import config.ConfiguracaoSistema;
 import dao.UsuarioDao;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JButton;
+import java.util.Objects;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.Usuario;
@@ -12,6 +13,7 @@ import model.vo.SelectItemVO;
 import model.vo.UsuarioFiltroVO;
 import org.apache.log4j.Logger;
 import model.util.ExceptionUtils;
+import model.util.MensageiroUtils;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.JDialogLista;
@@ -279,7 +281,9 @@ public class UsuarioLista extends JDialogLista {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         try {
             Usuario usuario = getLinhaSelecionada();
-            if (excluir(usuario)) {
+            if (Objects.equals(ConfiguracaoSistema.getUsuarioLogado().getId(), usuario.getId())) {
+                MensageiroUtils.mensagemAlerta(this, "Não é possível excluir o seu próprio usuário!");
+            } else if (excluir(usuario)) {
                 usuarioDao.excluir(usuario);
                 mostrarMensagemExcluido();
                 pesquisar();

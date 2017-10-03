@@ -23,7 +23,7 @@ import view.classes.VideoCaptura;
  *
  * @author Jonas
  */
-public class MovimentacaoEntradaCadastro extends JDialogCadastro {
+public class MovimentacaoCadastro extends JDialogCadastro {
     
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -34,7 +34,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     private ExibeQuadro exibeQuadro;
     private Thread executor;
 
-    public MovimentacaoEntradaCadastro(Object cadastroAnterior, Movimentacao movimentacao) {
+    public MovimentacaoCadastro(Object cadastroAnterior, Movimentacao movimentacao) {
         super("Movimentação - Entrada");
         initComponents();
 
@@ -291,6 +291,7 @@ public class MovimentacaoEntradaCadastro extends JDialogCadastro {
     
     private void desligarCamera() {
         executor.suspend();
+        exibeQuadro.desligarCamera();
     }
     
     private Long gravarImagem() {

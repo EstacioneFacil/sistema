@@ -20,7 +20,7 @@ import model.Movimentacao;
 import model.Vaga;
 import model.util.FormatacaoUtils;
 import net.miginfocom.swing.MigLayout;
-import view.movimentacao.MovimentacaoEntradaCadastro;
+import view.movimentacao.MovimentacaoCadastro;
 
 /**
  *
@@ -98,7 +98,7 @@ public class Principal extends javax.swing.JFrame {
         Object principal = this;
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new MovimentacaoEntradaCadastro(principal, movimentacao != null ? movimentacao : new Movimentacao(vaga)).setVisible(true);
+                new MovimentacaoCadastro(principal, movimentacao != null ? movimentacao : new Movimentacao(vaga)).setVisible(true);
             }
         });
     }

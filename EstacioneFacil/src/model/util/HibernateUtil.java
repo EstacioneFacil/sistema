@@ -28,10 +28,14 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
-    public static final SessionFactory sessionFactory;
+    public static SessionFactory sessionFactory;
     
     static {
-        try {
+        abrirConexao();
+    }
+        
+    public static void abrirConexao() {
+        try {            
             Configuration configuration = new Configuration();
             Properties properties = new Properties();
             properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
@@ -71,7 +75,7 @@ public class HibernateUtil {
         return sessionFactory.openSession();
     }
     
-    public void close() {
+    public static void close() {
         if (getSession() != null && getSession().isOpen()) {
             getSession().close();
         }

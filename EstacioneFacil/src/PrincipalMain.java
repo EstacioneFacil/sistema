@@ -1,6 +1,8 @@
 
 import config.ConfiguracaoSistema;
+import model.util.HibernateUtil;
 import model.vo.CredencialVO;
+import org.hibernate.Hibernate;
 import view.Login;
 import view.Principal;
 
@@ -21,7 +23,8 @@ public class PrincipalMain {
         if (ConfiguracaoSistema.getUsuarioLogado() == null) {
             System.exit(0);
         }
-        
+        HibernateUtil.close();
+        HibernateUtil.abrirConexao();
         Principal principal = new Principal();
         principal.setVisible(true);
     }
