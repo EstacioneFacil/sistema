@@ -99,7 +99,7 @@ public class AuditoriaLista extends JDialogLista {
         btnDetalhes = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        comboUsuario = new javax.swing.JComboBox<>();
+        comboUsuario = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -115,6 +115,11 @@ public class AuditoriaLista extends JDialogLista {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblAuditoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAuditoriaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAuditoria);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -139,7 +144,7 @@ public class AuditoriaLista extends JDialogLista {
         jLabel2.setText("Usuário:");
 
         comboUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador" }));
+        comboUsuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador" }));
         comboUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboUsuarioActionPerformed(evt);
@@ -215,6 +220,12 @@ public class AuditoriaLista extends JDialogLista {
     private void comboUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboUsuarioActionPerformed
         pesquisar();
     }//GEN-LAST:event_comboUsuarioActionPerformed
+
+    private void tblAuditoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAuditoriaMouseClicked
+        // TODO add your handling code here:
+        Auditoria auditoria = this.getLinhaSelecionada();
+        new AuditoriaDetalheView(auditoria).setVisible(true);
+    }//GEN-LAST:event_tblAuditoriaMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetalhes;
