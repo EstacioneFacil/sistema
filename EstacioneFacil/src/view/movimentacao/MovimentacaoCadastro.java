@@ -7,22 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Properties;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.imageio.ImageIO;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import model.Anexo;
@@ -30,7 +15,9 @@ import model.Movimentacao;
 import model.util.ExceptionUtils;
 import model.util.FormatacaoUtils;
 import model.util.MensageiroUtils;
+import model.vo.InfoVeiculoVO;
 import org.apache.log4j.Logger;
+import service.Service;
 import view.Principal;
 import view.classes.ExibeQuadro;
 import view.classes.JDialogCadastro;
@@ -45,6 +32,7 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private Movimentacao movimentacao;
+    private Service service;
     private MovimentacaoDao movimentacaoDao;
     private AnexoController anexoController;
     private VideoCaptura webCam;
@@ -55,8 +43,9 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     public MovimentacaoCadastro(Object cadastroAnterior, Movimentacao movimentacao) {
         super("Movimentação - Entrada");
         initComponents();
-
+        
         this.movimentacao = movimentacao;
+        this.service = new Service();
         this.movimentacaoDao = new MovimentacaoDao();
         this.anexoController = new AnexoController();
         
@@ -88,6 +77,8 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         txtEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtInformacoes = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -126,6 +117,11 @@ public class MovimentacaoCadastro extends JDialogCadastro {
 
         txtPlaca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPlaca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPlaca.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPlacaFocusLost(evt);
+            }
+        });
 
         txtArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -151,6 +147,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("Caso deseje receber o comprovante:");
 
+        txtInformacoes.setColumns(20);
+        txtInformacoes.setRows(5);
+        jScrollPane1.setViewportView(txtInformacoes);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,6 +166,14 @@ public class MovimentacaoCadastro extends JDialogCadastro {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtHoraEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5)
@@ -177,22 +185,16 @@ public class MovimentacaoCadastro extends JDialogCadastro {
                                     .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                                     .addComponent(txtTipoVeiculo)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel7))
+                                .addGap(68, 68, 68)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtHoraEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(152, 152, 152))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8))))
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(lblWebcam, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -223,19 +225,21 @@ public class MovimentacaoCadastro extends JDialogCadastro {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel8)
-                        .addGap(2, 2, 2)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel7)))
                     .addComponent(lblWebcam, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(2, 2, 2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -250,6 +254,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
          gravar();
     }//GEN-LAST:event_btnGravarActionPerformed
+
+    private void txtPlacaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlacaFocusLost
+       buscarInformacoesVeiculo();
+    }//GEN-LAST:event_txtPlacaFocusLost
 
     public void carregarCadastro() {   
         //carrega webcam
@@ -282,8 +290,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     
     public void carregarParaEdicao() {
         txtPlaca.setEnabled(false);
+        txtInformacoes.setEnabled(false);
         
         txtPlaca.setText(movimentacao.getPlaca());
+        txtInformacoes.setText(movimentacao.getInfoVeiculo());
         
         if (movimentacao.getAnexo() != null) {
             try {
@@ -306,10 +316,22 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         } else {
             movimentacao.setPlaca(placa);
         }
+        if (!txtInformacoes.getText().isEmpty()) {
+            movimentacao.setInfoVeiculo(txtInformacoes.getText());
+        }
         movimentacao.setIdUsuario(ConfiguracaoSistema.getUsuarioLogado().getId());
         return true;
     }
 
+    public void buscarInformacoesVeiculo() {
+        InfoVeiculoVO informacoes = service.buscarInfoVeiculoWS(txtPlaca.getText());
+        if (informacoes != null && informacoes.getMensagem().equals("sucesso")) {
+            txtInformacoes.setText(informacoes.toString());
+        } else {
+            txtInformacoes.setText("Não foi possível obter informações do veículo!");
+        }
+    }
+    
     public void gravar() {
         try {
             if (!verificaCamposObrigatorios()) {
@@ -317,13 +339,12 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             }
             desligarCamera();
             
-            movimentacao.setIdAnexo(gravarImagem());            
+            movimentacao.setIdAnexo(gravarImagem());                
             movimentacaoDao.gravar(movimentacao);
             
             //Caso preenchido o campo e-mail envia e-mail com anexo
-            if( !txtEmail.getText().isEmpty() )
-            {
-                this.enviarComprovante(movimentacao, txtEmail.getText());
+            if (!txtEmail.getText().isEmpty()) {
+                service.enviarComprovante(movimentacao, txtEmail.getText());
             }
             
             MensageiroUtils.mensagemSucesso(this, "Movimentação registrada com sucesso!");
@@ -336,90 +357,6 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             ExceptionUtils.mostrarErro(this, e.getMessage());
         }
     }
-    
-    public void enviarComprovante(Movimentacao movimentacao, String destinatario) {
-        
-        final String username = "5104a172f6ef40";
-        final String password = "768d8923352e20";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", "smtp.mailtrap.io");
-        props.put("mail.smtp.port", "2525");
-
-        Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-          });
-
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("jonasdiel@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(destinatario));
-            message.setSubject("Comprovante EstacioneFacil");
-            message.setText("Prezado,"
-                + "\n\n Segue em anexo seu comprovante de estacionamento!");
-            
-            //Gera comprovante
-            gearaComprovante("/tmp/comprovante.txt"); 
-            
-            
-             // Create the message part
-            BodyPart messageBodyPart = new MimeBodyPart();
-
-            // Now set the actual message
-            messageBodyPart.setText("Prezado, segue seu comprovante em anexo");
-
-            // Create a multipar message
-            Multipart multipart = new MimeMultipart();
-
-            // Set text message part
-            multipart.addBodyPart(messageBodyPart);
-
-            // Part two is attachment
-            messageBodyPart = new MimeBodyPart();
-            String filename = "/tmp/comprovante.txt";
-            DataSource source = new FileDataSource(filename);
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(filename);
-            multipart.addBodyPart(messageBodyPart);
-
-            // Send the complete message parts
-            message.setContent(multipart);
-
-            
-            
-            
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private static void gearaComprovante(String sFileName)
-{
-    try
-    {
-        FileWriter writer = new FileWriter(sFileName);
-        writer.append("Comprovante");
-        
-        //generate whatever data you want
-
-        writer.flush();
-        writer.close();
-    }
-    catch(IOException e)
-    {
-         e.printStackTrace();
-    } 
- }
     
     private void desligarCamera() {
         executor.suspend();
@@ -449,11 +386,13 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblWebcam;
     private javax.swing.JTextField txtArea;
     private javax.swing.JFormattedTextField txtDataEntrada;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JFormattedTextField txtHoraEntrada;
+    private javax.swing.JTextArea txtInformacoes;
     private javax.swing.JFormattedTextField txtPlaca;
     private javax.swing.JTextField txtTipoVeiculo;
     private javax.swing.JTextField txtVaga;

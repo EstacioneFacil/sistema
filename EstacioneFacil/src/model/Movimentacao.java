@@ -50,6 +50,9 @@ public class Movimentacao implements Serializable {
     @Column(name = "tabela_preco_id")
     private Long idTabelaPreco;
     
+    @Column(name = "informacoes_veiculo")
+    private String infoVeiculo;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "vaga_id", insertable = false, updatable = false)
     private Vaga vaga;
@@ -179,5 +182,13 @@ public class Movimentacao implements Serializable {
 
     public void setTabelaPreco(TabelaPreco tabelaPreco) {
         this.tabelaPreco = tabelaPreco;
+    }
+
+    public String getInfoVeiculo() {
+        return infoVeiculo;
+    }
+
+    public void setInfoVeiculo(String infoVeiculo) {
+        this.infoVeiculo = infoVeiculo;
     }
 }
