@@ -94,7 +94,7 @@ public class Service {
             message.setText("Prezado, \n\n Segue em anexo seu comprovante de estacionamento!");
             
             //Gera comprovante
-            gerarComprovante("/tmp/comprovante.txt"); 
+            gerarComprovante("Comprovante.txt", movimentacao); 
             
              // Create the message part
             BodyPart messageBodyPart = new MimeBodyPart();
@@ -110,7 +110,7 @@ public class Service {
 
             // Part two is attachment
             messageBodyPart = new MimeBodyPart();
-            String filename = "/tmp/comprovante.txt";
+            String filename = "C:\\tmp\\comprovante.txt";
             DataSource source = new FileDataSource(filename);
             messageBodyPart.setDataHandler(new DataHandler(source));
             messageBodyPart.setFileName(filename);
@@ -128,10 +128,10 @@ public class Service {
         }
     }
         
-    private static void gerarComprovante(String sFileName) {
+    private static void gerarComprovante(String sFileName, Movimentacao movimentacao) {
         try {
             FileWriter writer = new FileWriter(sFileName);
-            writer.append("Comprovante");
+            writer.append(movimentacao.getInfoVeiculo());
         
             //generate whatever data you want
 

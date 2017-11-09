@@ -3,10 +3,9 @@ package view.movimentacao;
 import config.ConfiguracaoSistema;
 import controller.AnexoController;
 import dao.MovimentacaoDao;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -256,13 +255,7 @@ public class MovimentacaoCadastro extends JDialogCadastro {
        buscarInformacoesVeiculo();
     }//GEN-LAST:event_txtPlacaFocusLost
 
-    public void carregarCadastro() {   
-        //carrega webcam
-        webCam = new VideoCaptura();
-        exibeQuadro = new ExibeQuadro(webCam, lblWebcam);
-        executor = new Thread(exibeQuadro);
-        executor.start();
-                
+    public void carregarCadastro() {                  
         FormatacaoUtils.reformatarData(txtDataEntrada);
         FormatacaoUtils.reformatarHora(txtHoraEntrada);
         FormatacaoUtils.reformatarPlaca(txtPlaca);
@@ -282,6 +275,12 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         
         if (movimentacao.getId() != null) {
             carregarParaEdicao();
+        } else {
+            //carrega webcam
+            webCam = new VideoCaptura();
+            exibeQuadro = new ExibeQuadro(webCam, lblWebcam);
+            executor = new Thread(exibeQuadro);
+            executor.start();
         }
     }
     
@@ -296,7 +295,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             try {
                 File anexo = new File(movimentacao.getAnexo().getCaminhoCompleto());
                 BufferedImage img = ImageIO.read(anexo);
-                Icon icon = new ImageIcon(img);
+                
+                Icon icon = new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(340, 300, Image.SCALE_SMOOTH));
+                
+//                Icon icon = new ImageIcon(img);
                 this.lblWebcam.setIcon(icon);
                 this.lblWebcam.repaint();
             } catch(Exception e) {
@@ -333,10 +335,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         try {
             if (!verificaCamposObrigatorios()) {
                 return;
-            }
+            }            
+            movimentacao.setIdAnexo(gravarImagem());                
             desligarCamera();
             
-            movimentacao.setIdAnexo(gravarImagem());                
             movimentacaoDao.gravar(movimentacao);
             
             //Caso preenchido o campo e-mail envia e-mail com anexo
@@ -356,8 +358,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     }
     
     private void desligarCamera() {
-        executor.suspend();
-        exibeQuadro.desligarCamera();
+        if (movimentacao.getId() == null) {
+            executor.suspend();
+            exibeQuadro.desligarCamera();
+        }
     }
     
     private Long gravarImagem() {
