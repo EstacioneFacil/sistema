@@ -111,4 +111,23 @@ public class TabelaPrecoDao extends GenericDao<TabelaPreco> {
         crit.setMaxResults(1);
         return (TabelaPreco) crit.uniqueResult();
     }
+    
+    
+    public TabelaPreco buscarPorArea(Long idArea) {
+        Criteria crit = getSession().createCriteria(TabelaPreco.class);
+        crit.add(Restrictions.eq("idArea", idArea));
+        crit.add(Restrictions.isNull("idVaga"));
+        crit.add(Restrictions.isNull("dataFim"));
+        crit.setMaxResults(1);
+        return (TabelaPreco) crit.uniqueResult();
+    }
+    
+    
+    public TabelaPreco buscarPorVaga(Long idVaga) {
+        Criteria crit = getSession().createCriteria(TabelaPreco.class);
+        crit.add(Restrictions.eq("idVaga", idVaga));
+        crit.add(Restrictions.isNull("dataFim"));
+        crit.setMaxResults(1);
+        return (TabelaPreco) crit.uniqueResult();
+    }
 }

@@ -5,6 +5,7 @@ import model.Vaga;
 import model.vo.SelectItemVO;
 import model.util.ExceptionUtils;
 import model.util.MensageiroUtils;
+import view.Principal;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.JDialogCadastro;
@@ -221,6 +222,7 @@ public class VagaCadastro extends JDialogCadastro {
                 if (getCadastroAnterior() instanceof VagaLista) {
                     ((VagaLista) getCadastroAnterior()).pesquisar();
                 }
+                Principal.atualizarVagas(vaga.getIdArea());
                 dispose();
             }
         } catch (Exception e) {

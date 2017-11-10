@@ -28,7 +28,7 @@ import view.movimentacao.MovimentacaoCadastro;
  */
 public class Principal extends javax.swing.JFrame {
     
-    private MovimentacaoDao movimentacaoDao;
+    private static MovimentacaoDao movimentacaoDao;
     
     public Principal() {
         initComponents();
@@ -42,8 +42,9 @@ public class Principal extends javax.swing.JFrame {
        
         atualizarVagas(ConfiguracaoSistema.getIdArea());
     }
-              
-    public void atualizarVagas(Long idArea) {        
+    
+    
+    public static void atualizarVagas(Long idArea) {        
         if (idArea != null) {
             Area area = new AreaDao().findById(idArea);
             if (area != null) {
@@ -61,7 +62,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
     
-    private void montarBotoesVagas(Area area, List<Vaga> vagas) {
+    private static void montarBotoesVagas(Area area, List<Vaga> vagas) {
         jPanel.removeAll();
         jPanel.setLayout(new MigLayout("wrap 8, fillx"));
         jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, area.getDescricao(), CENTER, DEFAULT_POSITION));
@@ -76,14 +77,14 @@ public class Principal extends javax.swing.JFrame {
         jPanel.revalidate();
     }
     
-    private void verificarVagas(JButton jButton, Vaga vaga) {
+    private  static void verificarVagas(JButton jButton, Vaga vaga) {
         //cor
         jButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         jButton.setForeground(Color.BLACK);
         jButton.setContentAreaFilled(false);
         jButton.setOpaque(true);
         
-        Movimentacao movimentacao = movimentacaoDao.buscarVagaAberta(vaga);
+        Movimentacao movimentacao = movimentacaoDao.buscarVagaAberta(null, vaga.getId());
         if (movimentacao != null) {
             jButton.setBackground(new Color(255, 53, 53));
             
@@ -95,15 +96,14 @@ public class Principal extends javax.swing.JFrame {
         }
 
         //acao
-        Object principal = this;
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new MovimentacaoCadastro(principal, movimentacao != null ? movimentacao : new Movimentacao(vaga)).setVisible(true);
+                new MovimentacaoCadastro(this, movimentacao != null ? movimentacao : new Movimentacao(vaga), true).setVisible(true);
             }
         });
     }
     
-    private void montarMensagemAlerta(String msg) {
+    private static void montarMensagemAlerta(String msg) {
         jPanel.removeAll();
         jPanel.setLayout(new MigLayout("wrap 3", "grow", "grow"));
         JLabel label = new JLabel(msg);
@@ -165,7 +165,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JPanel jPanel;
+    private static javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

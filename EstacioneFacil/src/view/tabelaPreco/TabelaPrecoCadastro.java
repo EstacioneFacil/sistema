@@ -341,9 +341,9 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
                     return false;
                 }
             } else {
-                tabelaPreco.setDataFim(FormatacaoUtils.getData(null));
+                tabelaPreco.setDataFim(null);
             }
-            tabelaPreco.setTipo(TipoPrecoEnum.getByLabel(comboTipo.getSelectedItem().toString()).getKey());
+            tabelaPreco.setTipo(TipoPrecoEnum.getByLabel(comboTipo.getSelectedItem().toString()).getKey().trim());
             return true;
         } catch(Exception e) {
             logger.error("Erro ao validar tabela de preços", e);

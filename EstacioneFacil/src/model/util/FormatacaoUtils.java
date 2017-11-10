@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
@@ -41,6 +42,14 @@ public class FormatacaoUtils {
     
     public static Date getData(String data) throws Exception {
         return getData(data, "dd/MM/yyyy");
+    }
+    
+    public static Date getData(Date data) throws Exception {
+        return getData(getDataString(data), "dd/MM/yyyy");
+    }
+    
+    public static Date getDataHora(String data) throws Exception {
+        return getData(data, "dd/MM/yyyy HH:mm:ss");
     }
         
     public static Date getData(String data, String formato) throws Exception {
@@ -131,5 +140,87 @@ public class FormatacaoUtils {
     
     public static String getMaskPlaca() {
         return "UUU-####";
+    }
+    
+    public static Integer getCalculaTempoHoras(Date dataInicial, Date dataFinal) {
+        Integer horas = 0;
+
+        Integer dias = diferencaDias(dataFinal, dataInicial);
+        if (dias != null && dias != 0) {
+                horas = dias * 24;
+        }
+        int hours = diferencaHoras(dataInicial, dataFinal);
+        horas = horas + hours;
+        return horas;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public static int diferencaHoras(Date horaMenor, Date horaMaior) {
+        int nroHoras = 0;
+        if (horaMenor.getHours() < horaMaior.getHours()) {
+                nroHoras = (horaMaior.getHours() - horaMenor.getHours());
+        } else if (horaMaior.getHours() < horaMenor.getHours()) {
+                nroHoras = (horaMenor.getHours() - horaMaior.getHours());
+        }
+        return nroHoras;
+    }
+
+    public static int diferencaMinutos(Date maior, Date menor) {
+        try {
+            menor = getDataHora(getDataString(menor)+" "+getHoraString(menor)+":00");
+            maior = getDataHora(getDataString(maior)+" "+getHoraString(maior)+":00");
+            Calendar calMenor = Calendar.getInstance();
+            calMenor.setTime(menor);
+            Calendar calMaior = Calendar.getInstance();
+            calMaior.setTime(maior);
+            long diferenca = calMaior.getTimeInMillis()-calMenor.getTimeInMillis();
+            return (int)diferenca/(60*1000);
+        } catch (Exception e) {
+                e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int diferencaSegundos(Date maior, Date menor) {
+        Calendar calMenor = Calendar.getInstance();
+        calMenor.setTime(menor);
+        Calendar calMaior = Calendar.getInstance();
+        calMaior.setTime(maior);
+        long diferenca = calMaior.getTimeInMillis()-calMenor.getTimeInMillis();
+        return (int)diferenca/(1000);
+    }
+
+    public static int diferencaDias(Date maior, Date menor) {
+        if (maior == null || menor == null) {
+                return 0;
+        }
+        Date maiorCorrigida = null;
+        Date menorCorrigida = null;
+        try {
+                maiorCorrigida = getData(maior);
+                menorCorrigida = getData(menor);
+        } catch (Exception e) {
+                maiorCorrigida = maior;
+                menorCorrigida = menor;
+                e.printStackTrace();
+        }
+        Calendar calMenor = Calendar.getInstance();
+        calMenor.setTime(menorCorrigida);
+        Calendar calMaior = Calendar.getInstance();
+        calMaior.setTime(maiorCorrigida);
+        long ini = calMenor.getTimeInMillis();
+        long fim = calMaior.getTimeInMillis();
+        long nroHoras = (fim - ini) / 1000 / 3600;
+        int nroDias = (int) nroHoras / 24;
+        return nroDias;
+    }
+        
+    public static String getValorFormatado(Double preco) {
+        if (preco != null) {
+            DecimalFormat twoPlaces = new DecimalFormat("0.00");
+            String valor = twoPlaces.format(preco);
+            return valor;
+        } 
+        return "";
     }
 }
