@@ -1,0 +1,11 @@
+ALTER TABLE tabela_preco ALTER COLUMN vaga_id DROP NOT NULL;
+ALTER TABLE movimentacao ALTER COLUMN tabela_preco_id TYPE INTEGER;
+ALTER TABLE movimentacao ALTER COLUMN tabela_preco_id DROP NOT NULL;
+ALTER TABLE movimentacao ALTER COLUMN anexo_id TYPE INTEGER;
+ALTER TABLE movimentacao ALTER COLUMN anexo_id DROP NOT NULL;
+ALTER TABLE movimentacao ADD INFORMACOES_VEICULO VARCHAR(500);
+INSERT INTO menu (descricao, ordem, grupo, menu_pai, classe) VALUES ('Movimentações', 5, 1, 1, 'view.movimentacao.MovimentacaoLista');
+INSERT INTO permissao (grupo_permissao_id, menu_id, visualizar) VALUES (1, 10, true);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (10, 1);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (10, 2);
+INSERT INTO menu_botao (menu_id, botao_id) VALUES (10, 3);
