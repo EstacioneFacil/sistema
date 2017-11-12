@@ -3,8 +3,10 @@ package view.movimentacao;
 import config.ConfiguracaoSistema;
 import controller.AnexoController;
 import dao.MovimentacaoDao;
+import dao.ParametroDao;
 import dao.TabelaPrecoDao;
 import dao.VagaDao;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,8 +14,10 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import model.Anexo;
 import model.Movimentacao;
+import model.Parametro;
 import model.TabelaPreco;
 import model.Vaga;
 import model.constant.TipoPrecoEnum;
@@ -22,6 +26,7 @@ import model.util.FormatacaoUtils;
 import model.util.MensageiroUtils;
 import model.vo.InfoVeiculoVO;
 import model.vo.SelectItemVO;
+import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import service.Service;
 import view.Principal;
@@ -42,6 +47,8 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     private VideoCaptura webCam;
     private ExibeQuadro exibeQuadro;
     private Thread executor;
+    private Parametro parametro;
+    private ParametroDao parametroDao;
     
 
     public MovimentacaoCadastro(Object cadastroAnterior, Movimentacao movimentacao, boolean dashboard) {
@@ -52,6 +59,8 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         this.service = new Service();
         this.movimentacaoDao = new MovimentacaoDao();
         this.anexoController = new AnexoController();
+        this.parametroDao = new ParametroDao();
+        this.parametro = parametroDao.buscarParametros();
         
         setCadastroAnterior(cadastroAnterior);
         
@@ -292,7 +301,9 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     }//GEN-LAST:event_btnGravarActionPerformed
 
     private void txtPlacaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlacaFocusLost
-       buscarInformacoesVeiculo();
+        if (parametro.isUtilizarWebService()) {
+            buscarInformacoesVeiculo();
+        }
     }//GEN-LAST:event_txtPlacaFocusLost
 
     private void comboAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAreaActionPerformed
@@ -334,11 +345,19 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         if (movimentacao.getId() != null) {
             carregarParaEdicao();
         } else {
-            //carrega webcam
-            webCam = new VideoCaptura();
-            exibeQuadro = new ExibeQuadro(webCam, lblWebcam);
-            executor = new Thread(exibeQuadro);
-            executor.start();
+            if (parametro.isTirarFotoVeiculo()) {
+                //carrega webcam
+                webCam = new VideoCaptura();
+                exibeQuadro = new ExibeQuadro(webCam, lblWebcam);
+                executor = new Thread(exibeQuadro);
+                executor.start();
+            } else {
+                lblWebcam.setLayout(new MigLayout("wrap 3", "grow", "grow"));
+                JLabel label = new JLabel("Câmera desativada nos parêmetros!");
+                label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+                lblWebcam.add(label, "align center center");
+                lblWebcam.revalidate();
+            }
             
             //libera so quando for saida
             lblValor.setVisible(false);
@@ -396,6 +415,12 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             } catch(Exception e) {
                 logger.error("Erro ao exibir imagem do veículo", e);
             }
+        } else {
+            lblWebcam.setLayout(new MigLayout("wrap 3", "grow", "grow"));
+            JLabel label = new JLabel("Nenhuma foto encontrada!");
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            lblWebcam.add(label, "align center center");
+            lblWebcam.revalidate();
         }
     }
     
@@ -494,7 +519,7 @@ public class MovimentacaoCadastro extends JDialogCadastro {
 
     public void buscarInformacoesVeiculo() {
         InfoVeiculoVO informacoes = service.buscarInfoVeiculoWS(txtPlaca.getText());
-        if (informacoes != null && informacoes.getMensagem().equals("sucesso")) {
+        if (informacoes != null && informacoes.getMensagem() != null && informacoes.getMensagem().equals("sucesso")) {
             txtInformacoes.setText(informacoes.toString());
         } else {
             txtInformacoes.setText("Não foi possível obter informações do veículo!");
@@ -506,10 +531,12 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             if (!verificaCamposObrigatorios()) {
                 return;
             }          
-            if (movimentacao.getIdAnexo() == null) {
-                movimentacao.setIdAnexo(gravarImagem());                
+            if (parametro.isTirarFotoVeiculo()) {
+                if (movimentacao.getIdAnexo() == null) {
+                    movimentacao.setIdAnexo(gravarImagem());                
+                }
+                desligarCamera();
             }
-            desligarCamera();
             
             movimentacaoDao.gravar(movimentacao);
                         
@@ -530,9 +557,11 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     }
     
     private void desligarCamera() {
-        if (movimentacao.getId() == null) {
-            executor.suspend();
-            exibeQuadro.desligarCamera();
+        if (parametro.isTirarFotoVeiculo()) {
+            if (movimentacao.getId() == null) {
+                executor.suspend();
+                exibeQuadro.desligarCamera();
+            }
         }
     }
     

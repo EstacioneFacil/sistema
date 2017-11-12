@@ -40,6 +40,8 @@ public class Principal extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         setJMenuBar(new MenuController().montarMenu());
        
+        chkVagaAberta.setSelected(true);
+        chkVagaFechada.setSelected(true);
         atualizarVagas(ConfiguracaoSistema.getIdArea());
     }
     
@@ -71,13 +73,15 @@ public class Principal extends javax.swing.JFrame {
         for (Vaga vaga : vagas) {
             JButton jButton = new JButton();
             jButton.setPreferredSize(dimension);
-            verificarVagas(jButton, vaga);
-            jPanel.add(jButton, "align center top");
+            jButton = verificarVagas(jButton, vaga);
+            if (jButton != null) {
+                jPanel.add(jButton, "align center top");
+            }
         }   
         jPanel.revalidate();
     }
     
-    private  static void verificarVagas(JButton jButton, Vaga vaga) {
+    private static JButton verificarVagas(JButton jButton, Vaga vaga) {
         //cor
         jButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         jButton.setForeground(Color.BLACK);
@@ -101,6 +105,17 @@ public class Principal extends javax.swing.JFrame {
                 new MovimentacaoCadastro(this, movimentacao != null ? movimentacao : new Movimentacao(vaga), true).setVisible(true);
             }
         });
+        //verifica check;
+        if (movimentacao == null && !chkVagaAberta.isSelected() && movimentacao != null && !chkVagaFechada.isSelected()) {
+            return null;
+        }
+        if (movimentacao == null && !chkVagaAberta.isSelected()) {
+            return null;
+        }
+        if (movimentacao != null && !chkVagaFechada.isSelected()) {
+            return null;
+        }
+        return jButton;
     }
     
     private static void montarMensagemAlerta(String msg) {
@@ -112,12 +127,16 @@ public class Principal extends javax.swing.JFrame {
         jPanel.revalidate();
     }
     
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel = new javax.swing.JPanel();
+        chkVagaAberta = new javax.swing.JCheckBox();
+        chkVagaFechada = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -129,6 +148,25 @@ public class Principal extends javax.swing.JFrame {
         jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Área", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         jPanel.setLayout(null);
         jScrollPane1.setViewportView(jPanel);
+
+        chkVagaAberta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkVagaAberta.setText("Abertas");
+        chkVagaAberta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkVagaAbertaActionPerformed(evt);
+            }
+        });
+
+        chkVagaFechada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkVagaFechada.setText("Ocupadas");
+        chkVagaFechada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkVagaFechadaActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Mostrar vagas:");
 
         jMenuBar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -146,14 +184,27 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chkVagaAberta)
+                        .addGap(10, 10, 10)
+                        .addComponent(chkVagaFechada)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(141, 141, 141)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkVagaAberta)
+                    .addComponent(chkVagaFechada)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -161,7 +212,18 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void chkVagaAbertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkVagaAbertaActionPerformed
+        atualizarVagas(ConfiguracaoSistema.getIdArea());
+    }//GEN-LAST:event_chkVagaAbertaActionPerformed
+
+    private void chkVagaFechadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkVagaFechadaActionPerformed
+        atualizarVagas(ConfiguracaoSistema.getIdArea());
+    }//GEN-LAST:event_chkVagaFechadaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private static javax.swing.JCheckBox chkVagaAberta;
+    private static javax.swing.JCheckBox chkVagaFechada;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar;

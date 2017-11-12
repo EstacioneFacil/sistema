@@ -11,6 +11,7 @@ import model.GrupoPermissao;
 import model.Menu;
 import model.MenuBotao;
 import model.Movimentacao;
+import model.Parametro;
 import model.Permissao;
 import model.PermissaoBotao;
 import model.TabelaPreco;
@@ -61,6 +62,7 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(TipoVeiculo.class);
             configuration.addAnnotatedClass(Usuario.class);
             configuration.addAnnotatedClass(Vaga.class);
+            configuration.addAnnotatedClass(Parametro.class);
             
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build(); 
             
