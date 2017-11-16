@@ -23,6 +23,17 @@ public class Parametro implements Serializable {
     
     @Column(name = "tirar_foto")
     private boolean tirarFotoVeiculo;
+    
+    @Column(name = "utilizar_auditoria")
+    private boolean utilizarAuditoria;
+
+    public boolean isUtilizarAuditoria() {
+        return utilizarAuditoria;
+    }
+
+    public void setUtilizarAuditoria(boolean utilizarAuditoria) {
+        this.utilizarAuditoria = utilizarAuditoria;
+    }
         
     
     public Long getId() {

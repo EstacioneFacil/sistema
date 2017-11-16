@@ -17,7 +17,7 @@ public class Parametros extends JDialogLista {
         initComponents();
 
         this.parametroDao = new ParametroDao();
-        this.parametro = parametroDao.buscarParametros();
+        this.parametro = parametroDao.buscarParametros();        
                
         carregarCadastro();
     }
@@ -30,6 +30,7 @@ public class Parametros extends JDialogLista {
         btnCancelar = new javax.swing.JButton();
         chkBuscarInfoWebservice = new javax.swing.JCheckBox();
         chkTirarFotoVeiculo = new javax.swing.JCheckBox();
+        chkUtilizarAuditoria = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -57,6 +58,14 @@ public class Parametros extends JDialogLista {
         chkTirarFotoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkTirarFotoVeiculo.setText("Tirar foto do veículo ao registrar uma nova movimentação");
 
+        chkUtilizarAuditoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkUtilizarAuditoria.setText("Habilitar auditoria das tabelas");
+        chkUtilizarAuditoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkUtilizarAuditoriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -72,7 +81,8 @@ public class Parametros extends JDialogLista {
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkTirarFotoVeiculo)
-                            .addComponent(chkBuscarInfoWebservice))))
+                            .addComponent(chkBuscarInfoWebservice)
+                            .addComponent(chkUtilizarAuditoria))))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -82,7 +92,9 @@ public class Parametros extends JDialogLista {
                 .addComponent(chkBuscarInfoWebservice)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chkTirarFotoVeiculo)
-                .addGap(100, 100, 100)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkUtilizarAuditoria)
+                .addGap(71, 71, 71)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -101,14 +113,18 @@ public class Parametros extends JDialogLista {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void chkUtilizarAuditoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkUtilizarAuditoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkUtilizarAuditoriaActionPerformed
+
     public void carregarCadastro() {   
         chkBuscarInfoWebservice.setSelected(parametro.isUtilizarWebService());
         chkTirarFotoVeiculo.setSelected(parametro.isTirarFotoVeiculo());
+        chkUtilizarAuditoria.setSelected(parametro.isUtilizarAuditoria());
     }
     
     public boolean verificaCamposObrigatorios() {
-        parametro.setUtilizarWebService(chkBuscarInfoWebservice.isSelected());
-        parametro.setTirarFotoVeiculo(chkTirarFotoVeiculo.isSelected());
+       
         return true;
     }
 
@@ -117,6 +133,9 @@ public class Parametros extends JDialogLista {
             if (!verificaCamposObrigatorios()) {
                 return;
             }
+            parametro.setUtilizarWebService(chkBuscarInfoWebservice.isSelected());
+            parametro.setTirarFotoVeiculo(chkTirarFotoVeiculo.isSelected());
+            parametro.setUtilizarWebService(chkUtilizarAuditoria.isSelected());
             parametroDao.gravar(parametro);
             MensageiroUtils.mensagemSucesso(this, ConfiguracaoSistema.MSG_REGISTRO_SUCESSO);
             
@@ -131,6 +150,7 @@ public class Parametros extends JDialogLista {
     private javax.swing.JButton btnGravar;
     private javax.swing.JCheckBox chkBuscarInfoWebservice;
     private javax.swing.JCheckBox chkTirarFotoVeiculo;
+    private javax.swing.JCheckBox chkUtilizarAuditoria;
     // End of variables declaration//GEN-END:variables
 
 }
