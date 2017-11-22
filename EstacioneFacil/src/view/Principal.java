@@ -29,22 +29,29 @@ import view.movimentacao.MovimentacaoCadastro;
 public class Principal extends javax.swing.JFrame {
     
     private static MovimentacaoDao movimentacaoDao;
+    private PrincipalSistema principalSistema;
     
-    public Principal() {
+    public Principal(PrincipalSistema principalSistema) {
         initComponents();
         
-        this.movimentacaoDao = new MovimentacaoDao();
-        
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE );
         setIconImage(new ImageIcon(getClass().getResource(ConfiguracaoSistema.ICONE)).getImage());
         setTitle(ConfiguracaoSistema.NOME);
         setExtendedState(MAXIMIZED_BOTH);
+        
+        this.movimentacaoDao = new MovimentacaoDao();
+        this.principalSistema = principalSistema;
+    }
+       
+    public void abrirTela() {
         setJMenuBar(new MenuController().montarMenu());
        
         chkVagaAberta.setSelected(true);
         chkVagaFechada.setSelected(true);
         atualizarVagas(ConfiguracaoSistema.getIdArea());
+        
+        setVisible(true);
     }
-    
     
     public static void atualizarVagas(Long idArea) {        
         if (idArea != null) {
@@ -142,6 +149,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jScrollPane1.setBorder(null);
 
@@ -219,6 +231,16 @@ public class Principal extends javax.swing.JFrame {
     private void chkVagaFechadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkVagaFechadaActionPerformed
         atualizarVagas(ConfiguracaoSistema.getIdArea());
     }//GEN-LAST:event_chkVagaFechadaActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        boolean trocarUsuario = new TrocarUsuario().abrirPergunta();
+        if (trocarUsuario) {
+            this.dispose();
+            principalSistema.trocarUsuario();
+        } else {
+            principalSistema.sair();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JCheckBox chkVagaAberta;

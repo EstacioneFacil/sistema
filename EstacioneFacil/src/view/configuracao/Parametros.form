@@ -115,9 +115,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Habilitar auditoria das tabelas"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkUtilizarAuditoriaActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

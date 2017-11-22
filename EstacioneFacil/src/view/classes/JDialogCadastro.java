@@ -9,6 +9,10 @@ import model.util.MensageiroUtils;
  */
 public class JDialogCadastro extends JDialogView {
     
+    public JDialogCadastro() {
+        super();
+    }
+    
     public JDialogCadastro(String nome) {
         super("Cadastro de " + nome);
     }

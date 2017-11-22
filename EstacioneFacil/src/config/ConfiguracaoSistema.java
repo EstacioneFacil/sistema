@@ -28,7 +28,13 @@ public class ConfiguracaoSistema {
     private static Long idArea;
     private static Usuario usuarioLogado;
 
-
+    
+    public static void zerarConfiguracoes() {
+        login = null;
+        idArea = null;
+        usuarioLogado = null;
+    }
+    
     public static String getLogin() {
         return login;
     }

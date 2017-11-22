@@ -1,32 +1,15 @@
 
-import config.ConfiguracaoSistema;
-import model.util.HibernateUtil;
-import model.vo.CredencialVO;
-import org.hibernate.Hibernate;
-import view.Login;
-import view.Principal;
+import view.PrincipalSistema;
+
 
 
 public class PrincipalMain {
-
+    
     public static void main(String[] args) {
         modificarLookAndFeel();
-        iniciarSistema();
-    }
-
-    public static void iniciarSistema() {               
-        Login login = new Login();
-        CredencialVO credencialVO = login.openLogin();
-        ConfiguracaoSistema.setUsuarioLogado(credencialVO.getUsuario());
-        ConfiguracaoSistema.setIdArea(credencialVO.getIdArea());
         
-        if (ConfiguracaoSistema.getUsuarioLogado() == null) {
-            System.exit(0);
-        }
-        HibernateUtil.close();
-        HibernateUtil.abrirConexao();
-        Principal principal = new Principal();
-        principal.setVisible(true);
+        PrincipalSistema principalSistema = new PrincipalSistema();
+        principalSistema.iniciarSistema();
     }
     
     private static void modificarLookAndFeel() {

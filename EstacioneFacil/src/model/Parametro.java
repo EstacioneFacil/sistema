@@ -35,7 +35,6 @@ public class Parametro implements Serializable {
         this.utilizarAuditoria = utilizarAuditoria;
     }
         
-    
     public Long getId() {
         return id;
     }

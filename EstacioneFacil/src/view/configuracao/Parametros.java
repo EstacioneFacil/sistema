@@ -60,11 +60,6 @@ public class Parametros extends JDialogLista {
 
         chkUtilizarAuditoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkUtilizarAuditoria.setText("Habilitar auditoria das tabelas");
-        chkUtilizarAuditoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkUtilizarAuditoriaActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,10 +108,6 @@ public class Parametros extends JDialogLista {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void chkUtilizarAuditoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkUtilizarAuditoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkUtilizarAuditoriaActionPerformed
-
     public void carregarCadastro() {   
         chkBuscarInfoWebservice.setSelected(parametro.isUtilizarWebService());
         chkTirarFotoVeiculo.setSelected(parametro.isTirarFotoVeiculo());
@@ -124,7 +115,6 @@ public class Parametros extends JDialogLista {
     }
     
     public boolean verificaCamposObrigatorios() {
-       
         return true;
     }
 
@@ -135,7 +125,7 @@ public class Parametros extends JDialogLista {
             }
             parametro.setUtilizarWebService(chkBuscarInfoWebservice.isSelected());
             parametro.setTirarFotoVeiculo(chkTirarFotoVeiculo.isSelected());
-            parametro.setUtilizarWebService(chkUtilizarAuditoria.isSelected());
+            parametro.setUtilizarAuditoria(chkUtilizarAuditoria.isSelected());
             parametroDao.gravar(parametro);
             MensageiroUtils.mensagemSucesso(this, ConfiguracaoSistema.MSG_REGISTRO_SUCESSO);
             

@@ -11,6 +11,13 @@ public class JDialogView extends javax.swing.JDialog {
         
     private Object cadastroAnterior;
     
+    public JDialogView() {
+        this.setResizable(false);
+        this.setModal(true);
+        this.setIconImage(new ImageIcon(getClass().getResource(ConfiguracaoSistema.ICONE)).getImage());
+        this.setTitle(ConfiguracaoSistema.NOME);
+    }
+    
     public JDialogView(String nome) {
         this.setResizable(false);
         this.setModal(true);
