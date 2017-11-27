@@ -223,4 +223,18 @@ public class FormatacaoUtils {
         } 
         return "";
     }
+    
+    public static Date getPrimeiroDiaDoMes(int mes) {
+        Calendar gc = Calendar.getInstance();
+        gc.set(gc.get(Calendar.YEAR), mes, 01);
+        gc.set(Calendar.DAY_OF_MONTH, 1);
+        return gc.getTime();
+    }
+	
+    public static Date getUltimoDiaDoMes(int mes) {
+        Calendar gc = Calendar.getInstance();
+        gc.set(gc.get(Calendar.YEAR), mes, 01);
+        gc.set(Calendar.DAY_OF_MONTH, gc.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return gc.getTime();
+    }
 }

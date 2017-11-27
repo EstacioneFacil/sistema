@@ -1,11 +1,12 @@
 package dao;
 
+import java.util.Date;
 import java.util.List;
 import model.Movimentacao;
-import model.Vaga;
 import model.vo.MovimentacaoFiltroVO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class MovimentacaoDao extends GenericDao<Movimentacao> {
@@ -73,5 +74,41 @@ public class MovimentacaoDao extends GenericDao<Movimentacao> {
             }
         }
         return crit.list();
+    }
+    	
+    public Long totalPorArea(Long idArea) {
+        Criteria criteria = getSession().createCriteria(Movimentacao.class);
+        criteria.createAlias("vaga", "vaga");
+
+        criteria.add(Restrictions.eq("vaga.idArea", idArea));
+        criteria.add(Restrictions.isNotNull("dataHoraSaida"));
+				
+        criteria.setProjection(Projections.rowCount());
+        return (Long) criteria.uniqueResult();
+    }
+	
+	
+    public Long totalPorTipoVeiculo(Long idTipoVeiculo) {
+        Criteria criteria = getSession().createCriteria(Movimentacao.class);
+        criteria.createAlias("vaga", "vaga");
+
+        criteria.add(Restrictions.eq("vaga.idTipoVeiculo", idTipoVeiculo));
+        criteria.add(Restrictions.isNotNull("dataHoraSaida"));
+
+        criteria.setProjection(Projections.rowCount());
+        return (Long) criteria.uniqueResult();
+    }
+	
+	
+    public Double valorTotalPorAreaMes(Long idArea, Date dataInicial, Date dataFinal) {
+        Criteria criteria = getSession().createCriteria(Movimentacao.class);
+        criteria.createAlias("vaga", "vaga");
+
+        criteria.add(Restrictions.eq("vaga.idArea", idArea));
+        criteria.add(Restrictions.isNotNull("dataHoraSaida"));
+        criteria.add(Restrictions.and(Restrictions.and(Restrictions.ge("dataHoraEntrada", dataInicial), Restrictions.le("dataHoraEntrada", dataFinal)), Restrictions.and(Restrictions.ge("dataHoraSaida", dataInicial), Restrictions.le("dataHoraSaida", dataFinal))));
+
+        criteria.setProjection(Projections.sum("valor"));
+        return (Double) criteria.uniqueResult();
     }
 }
