@@ -14,6 +14,11 @@ public class MovimentacaoDao extends GenericDao<Movimentacao> {
     public MovimentacaoDao() {
         super();
     }
+    
+    public List<Movimentacao> buscarTodos() {
+        Criteria crit = getSession().createCriteria(Movimentacao.class);
+        return crit.list();
+    }
 
     public void gravar(Movimentacao movimentacao) {
         if (movimentacao.getId() == null) {
