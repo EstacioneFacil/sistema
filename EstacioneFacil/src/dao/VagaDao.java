@@ -85,4 +85,15 @@ public class VagaDao extends GenericDao<Vaga> {
         }
         return crit.list();
     }
+    
+    public List<Vaga> buscarPorAreaTipoVeiculo(Long idArea, Long idTipoVeiculo) {
+        Criteria crit = getSession().createCriteria(Vaga.class);
+        if (idArea != null) {
+            crit.add(Restrictions.eq("idArea", idArea));
+        }
+        if (idTipoVeiculo != null) {
+            crit.add(Restrictions.eq("idTipoVeiculo", idTipoVeiculo));
+        }
+        return crit.list();
+    }
 }

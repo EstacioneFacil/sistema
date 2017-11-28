@@ -2,6 +2,7 @@ package view;
 
 import config.ConfiguracaoSistema;
 import controller.DashboardController;
+import controller.SocketController;
 import controller.menu.MenuController;
 import dao.AreaDao;
 import dao.MovimentacaoDao;
@@ -31,6 +32,7 @@ import view.movimentacao.MovimentacaoCadastro;
 public class Principal extends javax.swing.JFrame {
     
     private static MovimentacaoDao movimentacaoDao;
+    public static SocketController socketController;
     private DashboardController dashboardController;
     private PrincipalSistema principalSistema;
     
@@ -44,6 +46,9 @@ public class Principal extends javax.swing.JFrame {
         
         this.movimentacaoDao = new MovimentacaoDao();
         this.dashboardController = new DashboardController();
+        
+        this.socketController = new SocketController(this);
+        
         this.principalSistema = principalSistema;
     }
        
@@ -59,7 +64,13 @@ public class Principal extends javax.swing.JFrame {
         setVisible(true);
     }
     
-    public static void atualizarVagas(Long idArea) {        
+    public void atualizarDashboard(Long idArea) {
+        System.out.println("Entrou para atualizar");
+        atualizarVagas(idArea);
+        montarGraficos();
+    }
+    
+    public void atualizarVagas(Long idArea) {        
         if (idArea != null) {
             Area area = new AreaDao().findById(idArea);
             if (area != null) {

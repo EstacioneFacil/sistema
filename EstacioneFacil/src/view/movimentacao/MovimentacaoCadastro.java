@@ -49,6 +49,8 @@ public class MovimentacaoCadastro extends JDialogCadastro {
     private Thread executor;
     private Parametro parametro;
     private ParametroDao parametroDao;
+    private Long idArea;
+    private Long idTipoVeiculo;
     
 
     public MovimentacaoCadastro(Object cadastroAnterior, Movimentacao movimentacao, boolean dashboard) {
@@ -162,6 +164,11 @@ public class MovimentacaoCadastro extends JDialogCadastro {
 
         comboTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboTipoVeiculo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboTipoVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoVeiculoActionPerformed(evt);
+            }
+        });
 
         comboVaga.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboVaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -310,6 +317,10 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         selecionarArea();
     }//GEN-LAST:event_comboAreaActionPerformed
 
+    private void comboTipoVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoVeiculoActionPerformed
+        selecionarTipoVeiculo();
+    }//GEN-LAST:event_comboTipoVeiculoActionPerformed
+
     public void carregarCadastro(boolean dashboard) {                  
         FormatacaoUtils.reformatarData(txtDataEntrada);
         FormatacaoUtils.reformatarHora(txtHoraEntrada);
@@ -322,7 +333,7 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         comboTipoVeiculo.setModel(new ComboModel(CombosDinamicos.getTiposVeiculo(true)));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedIndex(0);
         
-        popularComboVagas(movimentacao.getVaga(), movimentacao.getVaga() != null ? movimentacao.getVaga().getArea().getId() : null);
+        popularComboVagas(movimentacao.getVaga(), movimentacao.getVaga() != null ? movimentacao.getVaga().getArea().getId() : null, movimentacao.getVaga() != null ? movimentacao.getVaga().getTipoVeiculo().getId() : null);
           
         if (dashboard) {
             comboArea.setEnabled(false);
@@ -444,16 +455,29 @@ public class MovimentacaoCadastro extends JDialogCadastro {
         return movimentacao;	
     }
     
+    public void selecionarTipoVeiculo() {
+        SelectItemVO itemTipoVeiculo = ((ComboModel) comboTipoVeiculo.getModel()).getSelectedItem();
+        if (itemTipoVeiculo != null) {
+            idTipoVeiculo = itemTipoVeiculo.getId();
+        } else {
+            idTipoVeiculo = null;
+        }
+        popularComboVagas(null, idArea, idTipoVeiculo);
+    }
+    
     public void selecionarArea() {
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();
         if (itemArea != null) {
-            popularComboVagas(null, itemArea.getId());
-        } 
+            idArea = itemArea.getId();
+        } else {
+            idArea = null;
+        }
+        popularComboVagas(null, idArea, idTipoVeiculo);
     }
     
-    public void popularComboVagas(Vaga vaga, Long idArea) {
+    public void popularComboVagas(Vaga vaga, Long idArea, Long idTipoVeiculo) {
         try {
-            comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(true, idArea)));
+            comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(true, idArea, idTipoVeiculo)));
             setarVagaCombo(vaga);
         } catch(Exception e){
             logger.error(e.getMessage());
@@ -541,15 +565,11 @@ public class MovimentacaoCadastro extends JDialogCadastro {
             movimentacaoDao.gravar(movimentacao);
                         
             MensageiroUtils.mensagemSucesso(this, "Movimentação registrada com sucesso!");
-            
-            if (getCadastroAnterior() instanceof Principal) {
-                ((Principal) getCadastroAnterior()).atualizarVagas(movimentacao.getVaga().getIdArea());
-            }
-            
+                        
             if (getCadastroAnterior() instanceof MovimentacaoLista) {
                 ((MovimentacaoLista) getCadastroAnterior()).pesquisar();
             }
-            Principal.atualizarVagas(movimentacao.getVaga().getIdArea());
+            Principal.socketController.enviarMensagem("atualizar-"+movimentacao.getVaga().getIdArea());
             dispose();
         } catch (Exception e) {
             ExceptionUtils.mostrarErro(this, e.getMessage());

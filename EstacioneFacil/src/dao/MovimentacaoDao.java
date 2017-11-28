@@ -29,6 +29,18 @@ public class MovimentacaoDao extends GenericDao<Movimentacao> {
         }
     }
     
+    
+    public Double valorTotal(MovimentacaoFiltroVO filtroVO) {
+        Criteria crit = getSession().createCriteria(Movimentacao.class);
+
+        if (filtroVO != null) {
+            crit = adicionarFiltros(crit, filtroVO);
+        }
+        crit.setProjection(Projections.sum("valor"));
+        return (Double) crit.uniqueResult();
+    }	
+    
+    
     public Movimentacao buscarVagaAberta(Long id, Long idVaga) {
         Criteria crit = getSession().createCriteria(Movimentacao.class);
         crit.add(Restrictions.eq("idVaga", idVaga));
@@ -42,7 +54,12 @@ public class MovimentacaoDao extends GenericDao<Movimentacao> {
     
     public List<Movimentacao> consultar(MovimentacaoFiltroVO filtroVO) {
         Criteria crit = getSession().createCriteria(Movimentacao.class);
-        
+        crit = adicionarFiltros(crit, filtroVO);
+        return crit.list();
+    }
+    	
+    
+    private Criteria adicionarFiltros(Criteria crit, MovimentacaoFiltroVO filtroVO) {
         if (filtroVO.getIdArea() != null || filtroVO.getIdTipoVeiculo() != null) {
             crit.createAlias("vaga", "vaga");
             
@@ -73,9 +90,10 @@ public class MovimentacaoDao extends GenericDao<Movimentacao> {
                 crit.add(critPesquisa);
             }
         }
-        return crit.list();
+        return crit;
     }
-    	
+    
+    
     public Long totalPorArea(Long idArea) {
         Criteria criteria = getSession().createCriteria(Movimentacao.class);
         criteria.createAlias("vaga", "vaga");

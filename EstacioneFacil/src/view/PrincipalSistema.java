@@ -20,6 +20,7 @@ public class PrincipalSistema {
         }
         HibernateUtil.close();
         HibernateUtil.abrirConexao();
+                
         Principal principal = new Principal(this);
         principal.abrirTela();
     }

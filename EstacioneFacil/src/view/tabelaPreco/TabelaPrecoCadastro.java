@@ -28,6 +28,8 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
 
     private TabelaPreco tabelaPreco;
     private TabelaPrecoDao tabelaPrecoDao;
+    private Long idArea;
+    private Long idTipoVeiculo;
 
     public TabelaPrecoCadastro(Object cadastroAnterior, TabelaPreco tabelaPreco) {
         super("Tabela de Preço");
@@ -105,6 +107,11 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
 
         comboTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboTipoVeiculo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboTipoVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoVeiculoActionPerformed(evt);
+            }
+        });
 
         comboVaga.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboVaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -228,6 +235,10 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         selecionarArea();
     }//GEN-LAST:event_comboAreaActionPerformed
 
+    private void comboTipoVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoVeiculoActionPerformed
+        selecionarTipoVeiculo();
+    }//GEN-LAST:event_comboTipoVeiculoActionPerformed
+
     public void carregarCadastro() {   
         FormatacaoUtils.reformatarData(txtDataInicio);
         FormatacaoUtils.reformatarData(txtDataFim);
@@ -239,7 +250,7 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         comboTipoVeiculo.setModel(new ComboModel(CombosDinamicos.getTiposVeiculo(true)));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedIndex(0);
         
-        popularComboVagas(tabelaPreco.getVaga(), tabelaPreco.getVaga() != null ? tabelaPreco.getVaga().getArea().getId() : null);
+        popularComboVagas(tabelaPreco.getVaga(), tabelaPreco.getVaga() != null ? tabelaPreco.getVaga().getArea().getId() : null, tabelaPreco.getVaga() != null ? tabelaPreco.getVaga().getTipoVeiculo().getId() : null);
         comboTipo.setModel(new DefaultComboBoxModel<>(CombosEstaticos.getTipoPagamento()));
         
         if (tabelaPreco.getId() != null) {
@@ -260,17 +271,30 @@ public class TabelaPrecoCadastro extends JDialogCadastro {
         ((DefaultComboBoxModel) comboTipo.getModel()).setSelectedItem(TipoPrecoEnum.getByKey(tabelaPreco.getTipo().trim()).getLabel());
         setarVagaCombo(tabelaPreco.getVaga());
     }
-
+    
+    public void selecionarTipoVeiculo() {
+        SelectItemVO itemTipoVeiculo = ((ComboModel) comboTipoVeiculo.getModel()).getSelectedItem();
+        if (itemTipoVeiculo != null) {
+            idTipoVeiculo = itemTipoVeiculo.getId();
+        } else {
+            idTipoVeiculo = null;
+        }
+        popularComboVagas(null, idArea, idTipoVeiculo);
+    }
+    
     public void selecionarArea() {
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();
         if (itemArea != null) {
-            popularComboVagas(null, itemArea.getId());
-        } 
+            idArea = itemArea.getId();
+        } else {
+            idArea = null;
+        }
+        popularComboVagas(null, idArea, idTipoVeiculo);
     }
-    
-    public void popularComboVagas(Vaga vaga, Long idArea) {
+        
+    public void popularComboVagas(Vaga vaga, Long idArea, Long idTipoVeiculo) {
         try {
-            comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(true, idArea)));
+            comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(true, idArea, idTipoVeiculo)));
             setarVagaCombo(vaga);
         } catch(Exception e){
             logger.error(e.getMessage());

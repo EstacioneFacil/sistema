@@ -46,7 +46,7 @@ public class TabelaPrecoLista extends JDialogLista {
         comboTipoVeiculo.setModel(new ComboModel(CombosDinamicos.getTiposVeiculo(false)));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedIndex(0);
         
-        comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(false, null)));
+        comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(false, null, null)));
         ((ComboModel) comboVaga.getModel()).setSelectedIndex(0);
     }
     
@@ -71,12 +71,12 @@ public class TabelaPrecoLista extends JDialogLista {
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();
         if (itemArea != null) {
             tabelaPrecoFiltroVO.setIdArea(itemArea.getId());
-            ((ComboModel) comboVaga.getModel()).setLista(CombosDinamicos.getVagas(false, itemArea.getId()));
         }
         SelectItemVO itemTipoVeiculo = ((ComboModel) comboTipoVeiculo.getModel()).getSelectedItem();
         if (itemTipoVeiculo != null) {
             tabelaPrecoFiltroVO.setIdTipoVeiculo(itemTipoVeiculo.getId());
         }
+        ((ComboModel) comboVaga.getModel()).setLista(CombosDinamicos.getVagas(false, tabelaPrecoFiltroVO.getIdArea(), tabelaPrecoFiltroVO.getIdTipoVeiculo()));
         SelectItemVO itemVaga = ((ComboModel) comboVaga.getModel()).getSelectedItem();
         if (itemVaga != null) {
             tabelaPrecoFiltroVO.setIdVaga(itemVaga.getId());

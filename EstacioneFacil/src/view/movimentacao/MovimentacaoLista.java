@@ -1,7 +1,6 @@
 package view.movimentacao;
 
 import dao.MovimentacaoDao;
-import view.tabelaPreco.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,10 +8,10 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.Movimentacao;
-import model.TabelaPreco;
 import model.vo.SelectItemVO;
 import org.apache.log4j.Logger;
 import model.util.ExceptionUtils;
+import model.util.FormatacaoUtils;
 import model.vo.MovimentacaoFiltroVO;
 import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
@@ -49,7 +48,7 @@ public class MovimentacaoLista extends JDialogLista {
         comboTipoVeiculo.setModel(new ComboModel(CombosDinamicos.getTiposVeiculo(false)));
         ((ComboModel) comboTipoVeiculo.getModel()).setSelectedIndex(0);
         
-        comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(false, null)));
+        comboVaga.setModel(new ComboModel(CombosDinamicos.getVagas(false, null, null)));
         ((ComboModel) comboVaga.getModel()).setSelectedIndex(0);
     }
     
@@ -65,6 +64,13 @@ public class MovimentacaoLista extends JDialogLista {
         this.tblMovimentacao.setModel(new MovimentacaoTableModel(dados));
         this.lblTotal.setText(String.valueOf(dados.size()));
 
+        Double valorTotal = movimentacaoDao.valorTotal(movimentacaoFiltroVO);
+        String valor = "Total: R$ 0,00";
+        if (valorTotal != null && valorTotal != 0.0) {
+            valor = "Total: R$ " + FormatacaoUtils.getValorFormatado(valorTotal);
+        }
+        this.lblValorTotal.setText(valor);
+        
         ajustarTabela();
     }
     
@@ -74,12 +80,12 @@ public class MovimentacaoLista extends JDialogLista {
         SelectItemVO itemArea = ((ComboModel) comboArea.getModel()).getSelectedItem();
         if (itemArea != null) {
             movimentacaoFiltroVO.setIdArea(itemArea.getId());
-            ((ComboModel) comboVaga.getModel()).setLista(CombosDinamicos.getVagas(false, itemArea.getId()));
         }
         SelectItemVO itemTipoVeiculo = ((ComboModel) comboTipoVeiculo.getModel()).getSelectedItem();
         if (itemTipoVeiculo != null) {
             movimentacaoFiltroVO.setIdTipoVeiculo(itemTipoVeiculo.getId());
         }
+        ((ComboModel) comboVaga.getModel()).setLista(CombosDinamicos.getVagas(false, movimentacaoFiltroVO.getIdArea(), movimentacaoFiltroVO.getIdTipoVeiculo()));
         SelectItemVO itemVaga = ((ComboModel) comboVaga.getModel()).getSelectedItem();
         if (itemVaga != null) {
             movimentacaoFiltroVO.setIdVaga(itemVaga.getId());
@@ -136,6 +142,7 @@ public class MovimentacaoLista extends JDialogLista {
         comboVaga = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         btnEditar = new javax.swing.JButton();
+        lblValorTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -275,6 +282,9 @@ public class MovimentacaoLista extends JDialogLista {
             }
         });
 
+        lblValorTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblValorTotal.setText("Total:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -286,22 +296,21 @@ public class MovimentacaoLista extends JDialogLista {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(731, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblValorTotal))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnIncluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPesquisar)))
-                        .addGap(20, 20, 20))))
+                        .addComponent(btnIncluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                        .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPesquisar)))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,7 +330,8 @@ public class MovimentacaoLista extends JDialogLista {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(lblTotal))
+                    .addComponent(lblTotal)
+                    .addComponent(lblValorTotal))
                 .addGap(20, 20, 20))
         );
 
@@ -393,6 +403,7 @@ public class MovimentacaoLista extends JDialogLista {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblValorTotal;
     private javax.swing.JTable tblMovimentacao;
     private javax.swing.JTextField txtPesquisar;
     // End of variables declaration//GEN-END:variables

@@ -81,7 +81,7 @@ public class VagaCadastro extends JDialogCadastro {
         comboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Descrição:*");
+        jLabel5.setText("Descrição:");
         jLabel5.setToolTipText("Grupo de Permissão");
 
         comboTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -183,8 +183,7 @@ public class VagaCadastro extends JDialogCadastro {
             vaga.setCodigo(txtCodigo.getText());
         }
         if (txtDescricao.getText().trim().equals("")) {
-            MensageiroUtils.mensagemAlerta(this, "Preencha a descrição!");
-            return false;
+            vaga.setDescricao(null);
         } else {
             vaga.setDescricao(txtDescricao.getText());
         }
@@ -222,7 +221,7 @@ public class VagaCadastro extends JDialogCadastro {
                 if (getCadastroAnterior() instanceof VagaLista) {
                     ((VagaLista) getCadastroAnterior()).pesquisar();
                 }
-                Principal.atualizarVagas(vaga.getIdArea());
+                Principal.socketController.enviarMensagem("atualizar-"+vaga.getIdArea());
                 dispose();
             }
         } catch (Exception e) {

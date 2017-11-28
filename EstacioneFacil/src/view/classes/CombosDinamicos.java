@@ -74,8 +74,8 @@ public class CombosDinamicos {
         return tiposVeiculoCombo;
     }
     
-    public static List<SelectItemVO> getVagas(boolean cadastro, Long idArea) {
-        List<Vaga> vagas = new VagaDao().buscarPorArea(idArea);
+    public static List<SelectItemVO> getVagas(boolean cadastro, Long idArea, Long idTipoVeiculo) {
+        List<Vaga> vagas = new VagaDao().buscarPorAreaTipoVeiculo(idArea, idTipoVeiculo);
         List<SelectItemVO> vagasCombo = new ArrayList<>();
         
         if (cadastro && idArea != null) {
