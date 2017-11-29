@@ -1,5 +1,6 @@
 package view.movimentacao;
 
+import controller.ExportacaoController;
 import dao.MovimentacaoDao;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -7,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
-import model.Movimentacao;
 import model.vo.SelectItemVO;
 import org.apache.log4j.Logger;
 import model.util.ExceptionUtils;
@@ -18,6 +18,8 @@ import view.classes.CombosDinamicos;
 import view.classes.JDialogLista;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import javax.persistence.Column;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,8 +30,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
+import model.Movimentacao;
+import model.util.MensageiroUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -153,14 +155,14 @@ public class MovimentacaoLista extends JDialogLista {
         txtPesquisar = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        comboArea = new javax.swing.JComboBox<String>();
+        comboArea = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        comboTipoVeiculo = new javax.swing.JComboBox<String>();
-        comboVaga = new javax.swing.JComboBox<String>();
+        comboTipoVeiculo = new javax.swing.JComboBox<>();
+        comboVaga = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         btnEditar = new javax.swing.JButton();
         lblValorTotal = new javax.swing.JLabel();
-        btnExcluir1 = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -227,7 +229,7 @@ public class MovimentacaoLista extends JDialogLista {
         jLabel2.setText("Área:");
 
         comboArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboArea.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador" }));
+        comboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador" }));
         comboArea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboAreaActionPerformed(evt);
@@ -238,7 +240,7 @@ public class MovimentacaoLista extends JDialogLista {
         jLabel3.setText("Tipo de Veículo:");
 
         comboTipoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboTipoVeiculo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador" }));
+        comboTipoVeiculo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador" }));
         comboTipoVeiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboTipoVeiculoActionPerformed(evt);
@@ -246,7 +248,7 @@ public class MovimentacaoLista extends JDialogLista {
         });
 
         comboVaga.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboVaga.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador" }));
+        comboVaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador" }));
         comboVaga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboVagaActionPerformed(evt);
@@ -304,13 +306,13 @@ public class MovimentacaoLista extends JDialogLista {
         lblValorTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblValorTotal.setText("Total:");
 
-        btnExcluir1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/delete.png"))); // NOI18N
-        btnExcluir1.setText("Excluir");
-        btnExcluir1.setName("btnExcluir"); // NOI18N
-        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/delete.png"))); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.setName("btnExcluir"); // NOI18N
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluir1ActionPerformed(evt);
+                btnExcluirActionPerformed(evt);
             }
         });
 
@@ -334,7 +336,7 @@ public class MovimentacaoLista extends JDialogLista {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir1)
+                        .addComponent(btnExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExportarXml)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
@@ -355,7 +357,7 @@ public class MovimentacaoLista extends JDialogLista {
                         .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnExcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExportarXml, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -412,74 +414,42 @@ public class MovimentacaoLista extends JDialogLista {
         pesquisar();
     }//GEN-LAST:event_comboVagaActionPerformed
 
-    private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExcluir1ActionPerformed
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        try {
+             Movimentacao movimentacao = getLinhaSelecionada();
+            if (excluir(movimentacao)) {
+                movimentacaoDao.excluir(movimentacao);
+                mostrarMensagemExcluido();
+                pesquisar();
+            }
+        } catch(Exception e) {
+            logger.error("Não foi possível excluir o registro!", e);
+            ExceptionUtils.mostrarErro(this, "Não foi possível excluir o registro!");
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
     
-    
-    private void exportarXML()
-    {
+    private void exportarXML() {
         JFileChooser jFileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivo XML", "xml");
         jFileChooser.setFileFilter(filter);
-        int result = jFileChooser.showOpenDialog(this);
-
-        List<Movimentacao> movimentacoes = new MovimentacaoDao().buscarTodos();
+        jFileChooser.setSelectedFile(new File("movimentacao.xml"));
+        int result = jFileChooser.showSaveDialog(this);
         
-        try {
-        
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-            // root elements
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("movimentacoes");
-            doc.appendChild(rootElement);
-
-            for(Movimentacao movimentacao : movimentacoes) {
-
-                    // staff elements
-                    Element elementoMovimentacao = doc.createElement("movimentacao");
-                    rootElement.appendChild(elementoMovimentacao);
-
-                    // id
-                    Element elementoid = doc.createElement("id");
-                    elementoid.appendChild(doc.createTextNode(movimentacao.getId().toString()));
-                    elementoMovimentacao.appendChild(elementoid);
-
-                    // data_hora_entrada
-                    Element elementodatahora = doc.createElement("data_hora_entrada");
-                    elementodatahora.appendChild(doc.createTextNode(movimentacao.getDataHoraEntrada().toString()));
-                    elementoMovimentacao.appendChild(elementodatahora);
-            }
-
-            // write the content into xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-               
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File arquivoSelecionado = jFileChooser.getSelectedFile();
-            String caminhoXML = arquivoSelecionado.getAbsolutePath();
-            System.out.println("Caminho arquivo selecionado: " + caminhoXML);
-            StreamResult resultXml = new StreamResult(new File(caminhoXML));
-            transformer.transform(source, resultXml);
+         if (result == JFileChooser.APPROVE_OPTION) {
+            List<Movimentacao> movimentacoes = new MovimentacaoDao().buscarTodos();
+            try {
+                new ExportacaoController().gerarXmlMovimentacoes(movimentacoes, jFileChooser.getSelectedFile());
+            } catch (Exception e) {
+                logger.error("Erro ao gerar o xml das movimentacoes", e);
+                MensageiroUtils.mensagemErro(this, "Houve um erro na geração do XML!");
+            } 
+            MensageiroUtils.mensagemSucesso(this, "XML gerado com sucesso!");
         }
-            // Output to console for testing
-            // StreamResult result = new StreamResult(System.out);
-
-            
-        
-        } catch (ParserConfigurationException pce) {
-                pce.printStackTrace();
-          } catch (TransformerException tfe) {
-                tfe.printStackTrace();
-          }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnExcluir1;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnExportarXml;
     private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnPesquisar;

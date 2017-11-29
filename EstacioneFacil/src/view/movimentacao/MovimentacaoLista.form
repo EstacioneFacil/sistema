@@ -40,7 +40,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnExcluir1" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnExcluir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnExportarXml" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="73" max="32767" attributes="0"/>
@@ -65,7 +65,7 @@
                       <Component id="btnIncluir" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="txtPesquisar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="btnEditar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      <Component id="btnExcluir1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="btnExcluir" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="btnExportarXml" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -337,7 +337,7 @@
         <Property name="text" type="java.lang.String" value="Total:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnExcluir1">
+    <Component class="javax.swing.JButton" name="btnExcluir">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>
@@ -349,7 +349,7 @@
         <Property name="name" type="java.lang.String" value="btnExcluir" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluir1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluirActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
