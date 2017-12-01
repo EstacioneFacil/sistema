@@ -1,6 +1,5 @@
 package view.movimentacao;
 
-import controller.ExportacaoController;
 import dao.MovimentacaoDao;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -17,23 +16,8 @@ import view.classes.ComboModel;
 import view.classes.CombosDinamicos;
 import view.classes.JDialogLista;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import javax.persistence.Column;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import model.Movimentacao;
-import model.util.MensageiroUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import view.exportacao.ExportacaoCadastro;
 
 
 /**
@@ -198,7 +182,7 @@ public class MovimentacaoLista extends JDialogLista {
 
         btnExportarXml.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExportarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/print.png"))); // NOI18N
-        btnExportarXml.setText("Exportar Xml");
+        btnExportarXml.setText("Exportar");
         btnExportarXml.setActionCommand("E");
         btnExportarXml.setName("btnExportarXml"); // NOI18N
         btnExportarXml.addActionListener(new java.awt.event.ActionListener() {
@@ -339,7 +323,7 @@ public class MovimentacaoLista extends JDialogLista {
                         .addComponent(btnExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExportarXml)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                         .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPesquisar)))
@@ -390,7 +374,7 @@ public class MovimentacaoLista extends JDialogLista {
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnExportarXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarXmlActionPerformed
-       this.exportarXML();
+        exportar();
     }//GEN-LAST:event_btnExportarXmlActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -428,24 +412,10 @@ public class MovimentacaoLista extends JDialogLista {
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
     
-    private void exportarXML() {
-        JFileChooser jFileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivo XML", "xml");
-        jFileChooser.setFileFilter(filter);
-        jFileChooser.setSelectedFile(new File("movimentacao.xml"));
-        int result = jFileChooser.showSaveDialog(this);
-        
-         if (result == JFileChooser.APPROVE_OPTION) {
-            List<Movimentacao> movimentacoes = new MovimentacaoDao().buscarTodos();
-            try {
-                new ExportacaoController().gerarXmlMovimentacoes(movimentacoes, jFileChooser.getSelectedFile());
-            } catch (Exception e) {
-                logger.error("Erro ao gerar o xml das movimentacoes", e);
-                MensageiroUtils.mensagemErro(this, "Houve um erro na geração do XML!");
-            } 
-            MensageiroUtils.mensagemSucesso(this, "XML gerado com sucesso!");
-        }
+    private void exportar() {
+         new ExportacaoCadastro().setVisible(true);
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;

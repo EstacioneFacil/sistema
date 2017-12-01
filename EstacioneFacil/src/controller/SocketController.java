@@ -27,10 +27,10 @@ public class SocketController {
         buscarEndereco();
         logger.info("Iniciando socket no endereco: "+ip+":"+porta);
         
-        servidor = new Servidor(ip, Integer.valueOf(porta), null);
+        servidor = new Servidor(ip, Integer.valueOf(porta.trim()), null);
         servidor.start();
 
-        cliente = new Cliente(this, ip, Integer.valueOf(porta));
+        cliente = new Cliente(this, ip, Integer.valueOf(porta.trim()));
         cliente.start();
     }
     
