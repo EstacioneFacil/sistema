@@ -2,7 +2,6 @@ package dao;
 
 import config.ConfiguracaoSistema;
 import java.util.List;
-import model.Menu;
 import model.PermissaoBotao;
 import model.vo.PermissaoBotaoVO;
 import org.hibernate.Criteria;
@@ -10,7 +9,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.BooleanType;
-import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 
 public class PermissaoBotaoDao extends GenericDao<PermissaoBotao> {

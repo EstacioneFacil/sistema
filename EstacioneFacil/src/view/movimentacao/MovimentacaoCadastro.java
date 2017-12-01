@@ -355,6 +355,7 @@ public class MovimentacaoCadastro extends JDialogCadastro {
                 
         if (movimentacao.getId() != null) {
             carregarParaEdicao();
+
         } else {
             if (parametro.isTirarFotoVeiculo()) {
                 //carrega webcam

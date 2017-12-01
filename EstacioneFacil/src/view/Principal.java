@@ -6,6 +6,7 @@ import controller.SocketController;
 import controller.menu.MenuController;
 import dao.AreaDao;
 import dao.MovimentacaoDao;
+import dao.PermissaoBotaoDao;
 import dao.PermissaoDao;
 import dao.VagaDao;
 import java.awt.Color;
@@ -21,9 +22,10 @@ import static javax.swing.border.TitledBorder.CENTER;
 import static javax.swing.border.TitledBorder.DEFAULT_POSITION;
 import model.Area;
 import model.Movimentacao;
-import model.Permissao;
 import model.Vaga;
 import model.util.FormatacaoUtils;
+import model.util.MensageiroUtils;
+import model.vo.PermissaoBotaoVO;
 import net.miginfocom.swing.MigLayout;
 import view.movimentacao.MovimentacaoCadastro;
 
@@ -97,11 +99,21 @@ public class Principal extends javax.swing.JFrame {
         if (idArea != null) {
             Area area = new AreaDao().findById(idArea);
             if (area != null) {
-                List<Vaga> vagas = new VagaDao().buscarPorArea(area.getId());
-                if (vagas != null && !vagas.isEmpty()) {
-                    montarBotoesVagas(area, vagas);
+                boolean permissaoVagas = new PermissaoDao().isPermissaoDashboard(7L, ConfiguracaoSistema.getUsuarioLogado().getIdGrupoPermissao());
+                if (permissaoVagas) {
+                    boolean permissaoMovimentacao = new PermissaoDao().isPermissaoDashboard(10L, ConfiguracaoSistema.getUsuarioLogado().getIdGrupoPermissao());
+                    if (permissaoMovimentacao) {                    
+                        List<Vaga> vagas = new VagaDao().buscarPorArea(area.getId());
+                        if (vagas != null && !vagas.isEmpty()) {
+                            montarBotoesVagas(area, vagas);
+                        } else {
+                            montarMensagemAlerta(jPanel, "Esta área não contém vagas cadastradas!");
+                        }
+                    } else {
+                        montarMensagemAlerta(jPanel, "Você não tem permissão para visualizar as movimentações!");
+                    }
                 } else {
-                    montarMensagemAlerta(jPanel, "Esta área não contém vagas cadastradas!");
+                    montarMensagemAlerta(jPanel, "Você não tem permissão para visualizar as vagas!");
                 }
             } else {
                 montarMensagemAlerta(jPanel, "A área selecionada não foi encontrada!");
@@ -149,9 +161,21 @@ public class Principal extends javax.swing.JFrame {
         //acao
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new MovimentacaoCadastro(this, movimentacao != null ? movimentacao : new Movimentacao(vaga), true).setVisible(true);
+                boolean bloquear = false;
+                List<PermissaoBotaoVO> permissaoBotoes = new PermissaoBotaoDao().buscarPermissoesPorTela("view.movimentacao.MovimentacaoLista");
+                for (PermissaoBotaoVO permissaoBotaoVO : permissaoBotoes) {
+                    if ((permissaoBotaoVO.getNome().equals("btnIncluir")) && !permissaoBotaoVO.isPermissao()) {
+                        bloquear = true;
+                    }
+                }
+                if (bloquear) {
+                    MensageiroUtils.mensagemAlerta(null, "Você não tem permissão para registrar uma movimentação!");
+                } else {
+                    new MovimentacaoCadastro(this, movimentacao != null ? movimentacao : new Movimentacao(vaga), true).setVisible(true);
+                }
             }
         });
+        
         //verifica check;
         if (movimentacao == null && !chkVagaAberta.isSelected() && movimentacao != null && !chkVagaFechada.isSelected()) {
             return null;

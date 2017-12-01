@@ -18,5 +18,4 @@ public class MenuBotaoDao extends GenericDao<MenuBotao> {
         crit.add(Restrictions.eq("idMenu", idMenu));
         return crit.list();
     }
-
 }
