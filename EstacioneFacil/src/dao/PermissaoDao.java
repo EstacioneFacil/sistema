@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 import model.Permissao;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class PermissaoDao extends GenericDao<Permissao> {
@@ -27,5 +28,14 @@ public class PermissaoDao extends GenericDao<Permissao> {
         Criteria crit = getSession().createCriteria(Permissao.class);
         crit.add(Restrictions.eq("idGrupoPermissao", idGrupoPermissao));
         return crit.list();
+    }
+    
+    public boolean isPermissaoDashboard(Long idMenu, Long idGrupoPermissao) {
+        Criteria crit = getSession().createCriteria(Permissao.class);
+        crit.add(Restrictions.eq("idMenu", idMenu));
+        crit.add(Restrictions.eq("idGrupoPermissao", idGrupoPermissao));
+        
+        crit.setProjection(Projections.property("visualizar"));
+        return (Boolean) crit.uniqueResult();
     }
 }

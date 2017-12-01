@@ -6,6 +6,7 @@ import controller.SocketController;
 import controller.menu.MenuController;
 import dao.AreaDao;
 import dao.MovimentacaoDao;
+import dao.PermissaoDao;
 import dao.VagaDao;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,6 +21,7 @@ import static javax.swing.border.TitledBorder.CENTER;
 import static javax.swing.border.TitledBorder.DEFAULT_POSITION;
 import model.Area;
 import model.Movimentacao;
+import model.Permissao;
 import model.Vaga;
 import model.util.FormatacaoUtils;
 import net.miginfocom.swing.MigLayout;
@@ -54,13 +56,34 @@ public class Principal extends javax.swing.JFrame {
        
     public void abrirTela() {
         setJMenuBar(new MenuController().montarMenu());
-       
-        chkVagaAberta.setSelected(true);
-        chkVagaFechada.setSelected(true);
-        atualizarVagas(ConfiguracaoSistema.getIdArea());
         
-        montarGraficos();
+        //permissao dashboard
+        boolean permissao = new PermissaoDao().isPermissaoDashboard(13L, ConfiguracaoSistema.getUsuarioLogado().getIdGrupoPermissao());
+        if (permissao) {
+            montarGraficos();
+        } else {
+            jTabbedPane.setEnabledAt(0, false);
+            jTabbedPane.setToolTipTextAt(0, "Você não tem permissão para acessar essa parte do sistema!");
+            jTabbedPane.setSelectedIndex(1);
+        }
         
+        //permissao dashboard-vagas
+       boolean permissaoVagas = new PermissaoDao().isPermissaoDashboard(14L, ConfiguracaoSistema.getUsuarioLogado().getIdGrupoPermissao());
+        if (permissaoVagas) {
+            chkVagaAberta.setSelected(true);
+            chkVagaFechada.setSelected(true);
+            atualizarVagas(ConfiguracaoSistema.getIdArea());
+        } else {
+            jTabbedPane.setEnabledAt(1, false);
+            jTabbedPane.setToolTipTextAt(1, "Você não tem permissão para acessar essa parte do sistema!");
+            jTabbedPane.setSelectedIndex(0);
+        }
+        
+        //nenhuma permissao
+        if (!permissao && !permissaoVagas) {
+            montarMensagemAlerta(jPanelDashboard, "Você não tem acesso ao Dashboard!");
+            jTabbedPane.setSelectedIndex(0);
+        }
         setVisible(true);
     }
     
@@ -78,13 +101,13 @@ public class Principal extends javax.swing.JFrame {
                 if (vagas != null && !vagas.isEmpty()) {
                     montarBotoesVagas(area, vagas);
                 } else {
-                    montarMensagemAlerta("Esta área não contém vagas cadastradas!");
+                    montarMensagemAlerta(jPanel, "Esta área não contém vagas cadastradas!");
                 }
             } else {
-                montarMensagemAlerta("A área selecionada não foi encontrada!");
+                montarMensagemAlerta(jPanel, "A área selecionada não foi encontrada!");
             }
         } else {
-            montarMensagemAlerta("Selecione primeiro uma área!");
+            montarMensagemAlerta(jPanel, "Selecione primeiro uma área!");
         }
     }
     
@@ -142,7 +165,7 @@ public class Principal extends javax.swing.JFrame {
         return jButton;
     }
     
-    private static void montarMensagemAlerta(String msg) {
+    private static void montarMensagemAlerta(JPanel jPanel, String msg) {
         jPanel.removeAll();
         jPanel.setLayout(new MigLayout("wrap 3", "grow", "grow"));
         JLabel label = new JLabel(msg);
@@ -169,10 +192,10 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane = new javax.swing.JTabbedPane();
+        jPanelDashboard = new javax.swing.JPanel();
         jPanelChart = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelDashboardVagas = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkVagaAberta = new javax.swing.JCheckBox();
         chkVagaFechada = new javax.swing.JCheckBox();
@@ -189,7 +212,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabbedPane.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanelChartLayout = new javax.swing.GroupLayout(jPanelChart);
         jPanelChart.setLayout(jPanelChartLayout);
@@ -202,24 +225,24 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 509, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelDashboardLayout = new javax.swing.GroupLayout(jPanelDashboard);
+        jPanelDashboard.setLayout(jPanelDashboardLayout);
+        jPanelDashboardLayout.setHorizontalGroup(
+            jPanelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDashboardLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanelDashboardLayout.setVerticalGroup(
+            jPanelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDashboardLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Dashboard", jPanel1);
+        jTabbedPane.addTab("Dashboard", jPanelDashboard);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Mostrar vagas:");
@@ -246,14 +269,14 @@ public class Principal extends javax.swing.JFrame {
         jPanel.setLayout(null);
         jScrollPane1.setViewportView(jPanel);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelDashboardVagasLayout = new javax.swing.GroupLayout(jPanelDashboardVagas);
+        jPanelDashboardVagas.setLayout(jPanelDashboardVagasLayout);
+        jPanelDashboardVagasLayout.setHorizontalGroup(
+            jPanelDashboardVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDashboardVagasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanelDashboardVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDashboardVagasLayout.createSequentialGroup()
                         .addGap(0, 383, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -263,11 +286,11 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jPanelDashboardVagasLayout.setVerticalGroup(
+            jPanelDashboardVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDashboardVagasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDashboardVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkVagaAberta)
                     .addComponent(chkVagaFechada)
                     .addComponent(jLabel1))
@@ -276,7 +299,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Atendimento", jPanel2);
+        jTabbedPane.addTab("Vagas", jPanelDashboardVagas);
 
         jMenuBar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -294,14 +317,14 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane)
                 .addContainerGap())
         );
 
@@ -336,10 +359,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar;
     private static javax.swing.JPanel jPanel;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelChart;
+    private javax.swing.JPanel jPanelDashboard;
+    private javax.swing.JPanel jPanelDashboardVagas;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane;
     // End of variables declaration//GEN-END:variables
 }

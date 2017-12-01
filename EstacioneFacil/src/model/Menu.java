@@ -34,6 +34,9 @@ public class Menu implements Serializable {
     
     @Column(name = "classe")
     private String classe;
+    
+    @Column(name = "visivel")
+    private boolean visivel;
 
     @Transient
     private List<Menu> subMenus;
@@ -93,5 +96,13 @@ public class Menu implements Serializable {
 
     public void setClasse(String classe) {
         this.classe = classe;
+    }
+
+    public boolean isVisivel() {
+        return visivel;
+    }
+
+    public void setVisivel(boolean visivel) {
+        this.visivel = visivel;
     }
 }

@@ -59,12 +59,14 @@ public class MenuController {
         List<Menu> menusConsulta = new MenuDao().buscarMenu();
 
         for (Menu menu : menusConsulta) {
-            if (menu.getMenuPai() == null) {
-                if (menu.getSubMenus() == null) {
-                    menu.setSubMenus(new ArrayList<Menu>());
+            if (menu.isVisivel()) {
+                if (menu.getMenuPai() == null) {
+                    if (menu.getSubMenus() == null) {
+                        menu.setSubMenus(new ArrayList<Menu>());
+                    }
+                    menu.getSubMenus().addAll(organizarSubMenu(menusConsulta, menu.getId()));
+                    menus.add(menu);
                 }
-                menu.getSubMenus().addAll(organizarSubMenu(menusConsulta, menu.getId()));
-                menus.add(menu);
             }
         }
         return menus;
